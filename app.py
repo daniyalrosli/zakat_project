@@ -104,10 +104,7 @@ st.sidebar.markdown("---")
 page = st.sidebar.radio("Select a page:", [
     "📊 Overview",
     "📈 Analytics",
-    "🤖 Model Performance",
-    "🔮 Individual Prediction",
-    "📋 Scenarios",
-    "💡 Strategic Insights"
+    "🔮 Individual Prediction"
 ], label_visibility="collapsed")
 
 st.sidebar.markdown("---")
@@ -400,79 +397,7 @@ elif page == "📈 Analytics":
         st.metric("Avg Household", f"{df_filtered['Total_Household_Members'].mean():.1f} members")
 
 # ════════════════════════════════════════════════════════════════════════════
-# PAGE 3: MODEL PERFORMANCE
-# ════════════════════════════════════════════════════════════════════════════
-
-elif page == "🤖 Model Performance":
-    st.title("🤖 Machine Learning Model Performance")
-    st.markdown("**Gradient Boosting Classifier trained on 9,923 recipients**")
-    st.markdown("---")
-    
-    col1, col2, col3, col4, col5 = st.columns(5)
-    
-    with col1:
-        st.metric("Accuracy", "90.8%")
-    with col2:
-        st.metric("Precision", "80.6%")
-    with col3:
-        st.metric("Recall", "100%")
-    with col4:
-        st.metric("F1-Score", "0.89")
-    with col5:
-        st.metric("ROC-AUC", "94.1%")
-    
-    st.markdown("---")
-    st.subheader("🔑 Feature Importance")
-    
-    features_data = {
-        'Feature': ['Total Income', 'Income Per Capita', 'Age', 'Income Diversity', 
-                   'Dependency Ratio', 'Household Size', 'Dual Income', 'Other Income Sources'],
-        'Importance': [0.25, 0.20, 0.18, 0.15, 0.10, 0.05, 0.04, 0.03]
-    }
-    
-    fig_imp = go.Figure(data=[go.Bar(
-        y=features_data['Feature'],
-        x=features_data['Importance'],
-        orientation='h',
-        marker_color='#3b82f6',
-        text=[f'{v*100:.0f}%' for v in features_data['Importance']],
-        textposition='outside'
-    )])
-    fig_imp.update_layout(
-        xaxis_title='Importance Score (%)',
-        height=400,
-        showlegend=False,
-        plot_bgcolor='rgba(248,250,252,0.5)',
-        paper_bgcolor='white',
-        margin=dict(l=200, r=50, t=30, b=50)
-    )
-    st.plotly_chart(fig_imp, use_container_width=True)
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.markdown("""
-        #### ✅ Model Strengths
-        - **100% Recall:** Identifies all poverty escapes
-        - **94.1% ROC-AUC:** Excellent discrimination ability
-        - **Cross-validated:** 5-fold CV with hyperparameter tuning
-        - **Interpretable:** Clear feature importance rankings
-        - **Robust:** Tested on 9,923 real zakat recipients
-        """)
-    
-    with col2:
-        st.markdown("""
-        #### ⚙️ Algorithm Details
-        - **Model:** Gradient Boosting Classifier
-        - **Framework:** Scikit-learn
-        - **Training Data:** 9,923 zakat recipients
-        - **Features:** 44 engineered features
-        - **Target:** 3-year poverty escape (binary)
-        - **Optimization:** GridSearchCV hyperparameter tuning
-        """)
-
-# ════════════════════════════════════════════════════════════════════════════
-# PAGE 4: INDIVIDUAL PREDICTION
+# PAGE 3: INDIVIDUAL PREDICTION
 # ════════════════════════════════════════════════════════════════════════════
 
 elif page == "🔮 Individual Prediction":
@@ -513,32 +438,47 @@ elif page == "🔮 Individual Prediction":
         income_diversity = int(primary_income > 0) + int(spouse_income > 0) + int(other_income > 0)
         
         try:
-            # Create sample
+            # Create sample with exact columns in exact order
             sample = pd.DataFrame()
             
-            for col in df.columns:
-                if col not in ['Poverty_Escape_Combined', 'Poverty_Escape_Income_Based', 'Poverty_Escape_Status_Based']:
-                    if 'Income_Per_Capita' in col:
-                        sample[col] = [income_pc]
-                    elif 'Dependency_Ratio' in col:
-                        sample[col] = [dep_ratio]
-                    elif 'Income_Diversity' in col:
-                        sample[col] = [max(0, income_diversity - 1)]
-                    elif 'Dual_Income' in col:
-                        sample[col] = [int(spouse_income > 0)]
-                    elif 'JumlahPendapatan' in col:
-                        sample[col] = [total_income]
-                    elif 'Umur' in col:
-                        sample[col] = [age]
-                    elif 'Total_Household_Members' in col:
-                        sample[col] = [household_size]
-                    else:
-                        sample[col] = [df[col].median()]
+            # Get only the feature columns (exclude target variables)
+            target_cols = ['Poverty_Escape_Combined', 'Poverty_Escape_Income_Based', 'Poverty_Escape_Status_Based']
+            feature_cols = [c for c in df.columns if c not in target_cols]
             
-            # Make prediction
-            cols_for_pred = [c for c in df.columns if c not in ['Poverty_Escape_Combined', 'Poverty_Escape_Income_Based', 'Poverty_Escape_Status_Based']]
-            pred = model.predict(sample[cols_for_pred])[0]
-            prob = model.predict_proba(sample[cols_for_pred])[0, 1]
+            # Create a row with data matching the trained model's feature names
+            for col in feature_cols:
+                col_lower = col.lower()
+                
+                if col in ['JumlahPendapatan', 'JumlahPendapatan_scaled']:
+                    sample[col] = [total_income if col == 'JumlahPendapatan' else (total_income - df['JumlahPendapatan'].mean()) / (df['JumlahPendapatan'].std() + 1e-8)]
+                elif col in ['Income_Per_Capita', 'Income_Per_Capita_scaled']:
+                    sample[col] = [income_pc if col == 'Income_Per_Capita' else (income_pc - df['Income_Per_Capita'].mean()) / (df['Income_Per_Capita'].std() + 1e-8)]
+                elif col in ['Dependency_Ratio', 'Dependency_Ratio_scaled']:
+                    sample[col] = [dep_ratio if col == 'Dependency_Ratio' else (dep_ratio - df['Dependency_Ratio'].mean()) / (df['Dependency_Ratio'].std() + 1e-8)]
+                elif col in ['Umur', 'Umur_scaled']:
+                    sample[col] = [age if col == 'Umur' else (age - df['Umur'].mean()) / (df['Umur'].std() + 1e-8)]
+                elif col in ['Total_Household_Members', 'Total_Household_Members_scaled']:
+                    sample[col] = [household_size if col == 'Total_Household_Members' else (household_size - df['Total_Household_Members'].mean()) / (df['Total_Household_Members'].std() + 1e-8)]
+                elif col == 'Income_Diversity':
+                    sample[col] = [max(0, income_diversity - 1)]
+                elif col == 'Dual_Income_Household':
+                    sample[col] = [int(spouse_income > 0)]
+                elif col == 'Has_Other_Income':
+                    sample[col] = [int(other_income > 0)]
+                elif col == 'Has_Working_Children':
+                    sample[col] = [int(has_children)]
+                elif col == 'Year_Index':
+                    sample[col] = [df[col].median()]
+                elif 'Jantina_' in col or 'DAERAH_' in col or 'Age_Category_' in col or 'Income_Category_' in col:
+                    # One-hot encoded features - set to 0 (median would be 0 for most)
+                    sample[col] = [0]
+                else:
+                    # Use median for any other unknown features
+                    sample[col] = [df[col].median()]
+            
+            # Make prediction with all features in correct order
+            pred = model.predict(sample[feature_cols])[0]
+            prob = model.predict_proba(sample[feature_cols])[0, 1]
             
             st.markdown("---")
             st.subheader("🎯 Prediction Results")
@@ -636,242 +576,6 @@ elif page == "🔮 Individual Prediction":
         
         except Exception as e:
             st.error(f"❌ Error during prediction: {str(e)}")
-
-# ════════════════════════════════════════════════════════════════════════════
-# PAGE 5: SCENARIO ANALYSIS
-# ════════════════════════════════════════════════════════════════════════════
-
-elif page == "📋 Scenarios":
-    st.title("📋 Policy Scenario Analysis")
-    st.markdown("**Explore poverty escape rates under different intervention scenarios**")
-    st.markdown("---")
-    
-    scenarios = {
-        'Baseline': 38.2,
-        'Income Support': 52.0,
-        'Skills Training': 58.0,
-        'Business Support': 62.0,
-        'Economic Boost': 65.0,
-        'Combined Programs': 78.0
-    }
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.subheader("📊 Escape Rate by Scenario")
-        fig_scen = go.Figure(data=[go.Bar(
-            x=list(scenarios.keys()),
-            y=list(scenarios.values()),
-            marker_color=['#64748b', '#3b82f6', '#8b5cf6', '#f59e0b', '#10b981', '#ef4444'],
-            text=[f'{v:.1f}%' for v in scenarios.values()],
-            textposition='outside'
-        )])
-        fig_scen.update_layout(
-            yaxis_title='Poverty Escape Rate (%)',
-            height=400,
-            showlegend=False,
-            plot_bgcolor='rgba(248,250,252,0.5)',
-            paper_bgcolor='white',
-            margin=dict(l=50, r=20, t=30, b=80)
-        )
-        st.plotly_chart(fig_scen, use_container_width=True)
-    
-    with col2:
-        st.subheader("📈 Impact vs Baseline")
-        impacts = [s - scenarios['Baseline'] for s in list(scenarios.values())[1:]]
-        names = list(scenarios.keys())[1:]
-        colors_impact = ['#3b82f6', '#8b5cf6', '#f59e0b', '#10b981', '#ef4444']
-        
-        fig_impact = go.Figure(data=[go.Bar(
-            x=names,
-            y=impacts,
-            marker_color=colors_impact,
-            text=[f'+{v:.1f}pp' for v in impacts],
-            textposition='outside'
-        )])
-        fig_impact.update_layout(
-            yaxis_title='Percentage Point Gain',
-            height=400,
-            showlegend=False,
-            plot_bgcolor='rgba(248,250,252,0.5)',
-            paper_bgcolor='white',
-            margin=dict(l=50, r=20, t=30, b=80)
-        )
-        st.plotly_chart(fig_impact, use_container_width=True)
-    
-    st.markdown("---")
-    st.subheader("📌 Scenario Details")
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        with st.expander("🟫 Baseline (38.2%)", expanded=False):
-            st.write("**Current conditions without new intervention**")
-            st.markdown("- Continue existing zakat distribution\n- No new programs or initiatives\n- Natural market improvements only")
-    
-    with col2:
-        with st.expander("🔵 Income Support (52.0%)", expanded=False):
-            st.write("**Monthly cash assistance to bottom 30% of recipients**")
-            st.markdown("- RM300-500/month cash transfer\n- 12-month minimum support period\n- Targeted to lowest income households\n- **Impact: +13.8 pp**")
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        with st.expander("🟣 Skills Training (58.0%)", expanded=False):
-            st.write("**Vocational programs + job placement (3-6 months)**")
-            st.markdown("- IT, trades, service sector training\n- Job placement assistance\n- Allowance during training period\n- **Impact: +19.8 pp**")
-    
-    with col2:
-        with st.expander("🟠 Business Support (62.0%)", expanded=False):
-            st.write("**Microfinance + business mentoring**")
-            st.markdown("- Microfinance loans (RM5,000-20,000)\n- 6-month business mentoring\n- Market linkage support\n- **Impact: +23.8 pp**")
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        with st.expander("🟢 Economic Boost (65.0%)", expanded=False):
-            st.write("**20% income increase + income diversification**")
-            st.markdown("- Support primary business growth\n- Develop secondary income sources\n- Market access improvement\n- **Impact: +26.8 pp**")
-    
-    with col2:
-        with st.expander("🔴 Combined Programs (78.0%)", expanded=False):
-            st.write("**All interventions integrated - comprehensive support**")
-            st.markdown("- Income support for immediate relief\n- Skills training for capacity building\n- Business support for income generation\n- **Impact: +39.8 pp**")
-
-# ════════════════════════════════════════════════════════════════════════════
-# PAGE 6: STRATEGIC INSIGHTS
-# ════════════════════════════════════════════════════════════════════════════
-
-elif page == "💡 Strategic Insights":
-    st.title("💡 Strategic Insights & Recommendations")
-    st.markdown("**Evidence-based recommendations for poverty escape programs**")
-    st.markdown("---")
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.subheader("✅ What Drives Poverty Escape")
-        st.markdown("""
-        **Multiple Income Sources**
-        - Escape rate: 65% (vs 38% baseline)
-        - Impact: +27 percentage points
-        
-        **Dual-Income Households**
-        - 78% higher success rate
-        - Most reliable success factor
-        
-        **Age 30-50**
-        - Peak earning and productivity years
-        - Highest escape probability
-        
-        **Financial Literacy**
-        - Better savings and planning
-        - Improved income management
-        """)
-    
-    with col2:
-        st.subheader("⚠️ What Prevents Poverty Escape")
-        st.markdown("""
-        **Single Income Dependency**
-        - Only 20% escape rate
-        - Highly vulnerable to shocks
-        
-        **High Dependency Ratio**
-        - More dependents = limited surplus
-        - Reduced investment capacity
-        
-        **Very Low Per Capita Income**
-        - <RM300 per capita = critical need
-        - Insufficient for basic needs + investment
-        
-        **Lack of Skills/Education**
-        - Limited job opportunities
-        - Wage stagnation
-        """)
-    
-    st.markdown("---")
-    st.subheader("📅 Implementation Roadmap")
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.markdown("""
-        ### 🟦 SHORT TERM (0-6 months)
-        
-        **Immediate Actions:**
-        - ✅ Cash assistance to 20% poorest
-        - ✅ Quick skills training (4-8 weeks)
-        - ✅ Market linkage programs
-        - ✅ Financial literacy workshops
-        """)
-    
-    with col2:
-        st.markdown("""
-        ### 🟨 MEDIUM TERM (6-18 months)
-        
-        **Building Capacity:**
-        - ✅ Vocational training programs
-        - ✅ Microfinance rollout
-        - ✅ Women empowerment initiatives
-        - ✅ Business mentoring schemes
-        """)
-    
-    with col3:
-        st.markdown("""
-        ### 🟩 LONG TERM (18+ months)
-        
-        **Sustainability:**
-        - ✅ Permanent employment placement
-        - ✅ Asset building programs
-        - ✅ Social enterprise models
-        - ✅ Economic resilience networks
-        """)
-    
-    st.markdown("---")
-    st.subheader("📊 5-Year Impact Projection")
-    
-    years = ['2025', '2026', '2027', '2028', '2029']
-    baseline_proj = [38.2, 40.5, 42.1, 43.0, 43.5]
-    intervention_proj = [38.2, 52.0, 65.5, 72.0, 78.0]
-    
-    fig_proj = go.Figure()
-    fig_proj.add_trace(go.Scatter(
-        x=years,
-        y=baseline_proj,
-        name='No Intervention',
-        line=dict(color='#94a3b8', width=3, dash='dash')
-    ))
-    fig_proj.add_trace(go.Scatter(
-        x=years,
-        y=intervention_proj,
-        name='With Programs',
-        line=dict(color='#10b981', width=3),
-        fill='tonexty'
-    ))
-    fig_proj.update_layout(
-        title='Projected Poverty Escape Rate (5 Years)',
-        yaxis_title='Escape Rate (%)',
-        xaxis_title='Year',
-        height=400,
-        plot_bgcolor='rgba(248,250,252,0.5)',
-        paper_bgcolor='white',
-        legend=dict(x=0.02, y=0.98)
-    )
-    st.plotly_chart(fig_proj, use_container_width=True)
-    
-    st.markdown("---")
-    st.subheader("🎯 Key Performance Targets")
-    
-    col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        st.metric("🎯 Target Escape Rate", "70-75%", "vs 38% current")
-    with col2:
-        st.metric("👥 Recipients to Help", "~4,000", "of 9,923")
-    with col3:
-        st.metric("💰 Avg Income Lift", "+RM 300/mo", "per household")
-    with col4:
-        st.metric("📅 Timeline", "24 months", "to reach target")
 
 # ════════════════════════════════════════════════════════════════════════════
 # FOOTER
