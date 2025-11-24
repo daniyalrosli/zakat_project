@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import { Tabs, Tab, Box, Typography, Container } from '@mui/material';
-import MapComponent from '../Map/MapComponent';
-import ForecastComponent from '../Forecast/ForecastComponent';
-import SummaryComponent from '../Summary/SummaryComponent';
-import ReportingComponent from '../Reporting/ReportingComponent';
+import React, { useState, Suspense, lazy } from 'react';
+import { Tabs, Tab, Box, Typography, Container, CircularProgress } from '@mui/material';
 import MapIcon from '@mui/icons-material/Map';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import DescriptionIcon from '@mui/icons-material/Description';
+
+const MapComponent = lazy(() => import('../Map/MapComponent'));
+const ForecastComponent = lazy(() => import('../Forecast/ForecastComponent'));
+const SummaryComponent = lazy(() => import('../Summary/SummaryComponent'));
+const ReportingComponent = lazy(() => import('../Reporting/ReportingComponent'));
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -50,18 +51,20 @@ const Dashboard = () => {
             <Tab icon={<DescriptionIcon />} label="Reporting" />
           </Tabs>
         </Box>
-        <TabPanel value={value} index={0}>
-          <MapComponent />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <ForecastComponent />
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <SummaryComponent />
-        </TabPanel>
-        <TabPanel value={value} index={3}>
-          <ReportingComponent />
-        </TabPanel>
+        <Suspense fallback={<Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}><CircularProgress /></Box>}>
+          <TabPanel value={value} index={0}>
+            <MapComponent />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <ForecastComponent />
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            <SummaryComponent />
+          </TabPanel>
+          <TabPanel value={value} index={3}>
+            <ReportingComponent />
+          </TabPanel>
+        </Suspense>
       </Box>
     </Container>
   );

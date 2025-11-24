@@ -1,36 +1,114 @@
-import React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { Box } from '@mui/material';
-
-const columns = [
-  { field: 'id', headerName: 'ID', width: 90 },
-  { field: 'name', headerName: 'Recipient Name', width: 150 },
-  { field: 'status', headerName: 'Status', width: 150 },
-  { field: 'riskLevel', headerName: 'Risk Level', width: 110 },
-  { field: 'region', headerName: 'Region', width: 160 },
-];
-
-const rows = [
-  { id: 1, name: 'Ahmad', status: 'Active', riskLevel: 'Low', region: 'Kuala Lumpur' },
-  { id: 2, name: 'Siti', status: 'Active', riskLevel: 'Medium', region: 'Petaling Jaya' },
-  { id: 3, name: 'Muthu', status: 'Inactive', riskLevel: 'High', region: 'Puchong' },
-  { id: 4, name: 'Tan', status: 'Active', riskLevel: 'Low', region: 'Kuala Lumpur' },
-  { id: 5, name: 'Zainab', status: 'Active', riskLevel: 'Low', region: 'Shah Alam' },
-];
+import React, { useState, useEffect, useMemo } from 'react';
+import { MaterialReactTable } from 'material-react-table';
 
 const ReportingComponent = () => {
+  const [data, setData] = useState([]);
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isRefetching, setIsRefetching] = useState(false);
+  const [rowCount, setRowCount] = useState(0);
+
+  //table state
+  const [globalFilter, setGlobalFilter] = useState('');
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!data.length) {
+        setIsLoading(true);
+      } else {
+        setIsRefetching(true);
+      }
+
+      const url = new URL(
+        '/api/reporting',
+        'http://localhost:3001',
+      );
+      url.searchParams.set(
+        'page',
+        `${pagination.pageIndex}`,
+      );
+      url.searchParams.set('size', `${pagination.pageSize}`);
+      url.searchParams.set('globalFilter', globalFilter ?? '');
+
+      try {
+        const response = await fetch(url.href);
+        const json = await response.json();
+        setData(json.data);
+        setRowCount(json.rowCount);
+      } catch (error) {
+        setIsError(true);
+        console.error(error);
+        return;
+      }
+      setIsError(false);
+      setIsLoading(false);
+      setIsRefetching(false);
+    };
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    globalFilter,
+    pagination.pageIndex,
+    pagination.pageSize,
+  ]);
+
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: 'Nama',
+        header: 'Name',
+      },
+      {
+        accessorKey: 'StatusBaruPemutihan',
+        header: 'Status',
+      },
+      {
+        accessorKey: 'Poverty_Risk_Level',
+        header: 'Risk Level',
+      },
+      {
+        accessorKey: 'DAERAH',
+        header: 'Daerah',
+      },
+      {
+        accessorKey: 'JumlahPendapatan',
+        header: 'Income (MYR)',
+        Cell: ({ cell }) => cell.getValue().toLocaleString(),
+      },
+      {
+        accessorKey: 'Can_Escape_Poverty',
+        header: 'Can Escape Poverty',
+        Cell: ({ cell }) => (cell.getValue() === 1 ? 'Yes' : 'No'),
+      },
+    ],
+    [],
+  );
+
   return (
     <div>
       <h2>Reporting</h2>
-      <Box sx={{ height: 400, width: '100%' }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-          checkboxSelection
-        />
-      </Box>
+      <MaterialReactTable
+        columns={columns}
+        data={data}
+        enableRowSelection
+        enableColumnOrdering
+        manualPagination
+        manualFiltering
+        rowCount={rowCount}
+        onGlobalFilterChange={setGlobalFilter}
+        onPaginationChange={setPagination}
+        state={{
+          globalFilter,
+          isLoading,
+          pagination,
+          showAlertBanner: isError,
+          showProgressBars: isRefetching,
+        }}
+      />
     </div>
   );
 };
