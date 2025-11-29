@@ -1,68 +1,41 @@
 'use client';
 
 import Navbar from '@/components/navbar';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import {
+  districtDistribution,
+  summaryStats,
+  yearlyBreakdown,
+  monthlyDistribution,
+  ageGroupDistribution,
+  genderDistribution,
+  healthStatusDistribution,
+  jobTypeDistribution,
+} from '@/data/zakatData';
 
 export default function Statistics() {
   const [selectedDaerah, setSelectedDaerah] = useState('all');
-  const [selectedYear, setSelectedYear] = useState('2024');
+  const [selectedYear, setSelectedYear] = useState<'2022' | '2023' | '2024'>('2024');
 
-  // Recipients by daerah for donut chart
-  const recipientsByCategory = [
-    { name: 'Petaling', value: 2845, color: '#ef4444', percentage: 28.7 },
-    { name: 'Klang', value: 2134, color: '#3b82f6', percentage: 21.5 },
-    { name: 'Gombak', value: 1678, color: '#eab308', percentage: 16.9 },
-    { name: 'Hulu Langat', value: 1456, color: '#22c55e', percentage: 14.7 },
-    { name: 'Others', value: 1810, color: '#8b5cf6', percentage: 18.2 },
-  ];
+  // Get monthly data for selected year
+  const monthlyData = useMemo(() => {
+    return monthlyDistribution[selectedYear] || monthlyDistribution['2024'];
+  }, [selectedYear]);
 
-  // Recipients by state for bar chart
-  const recipientsByState = [
-    { state: 'Selangor', count: 3542 },
-    { state: 'Kuala Lumpur', count: 2834 },
-    { state: 'Johor', count: 1923 },
-    { state: 'Penang', count: 1456 },
-    { state: 'Perak', count: 1289 },
-    { state: 'Kedah', count: 987 },
-    { state: 'Kelantan', count: 823 },
-    { state: 'Pahang', count: 756 },
-    { state: 'Negeri Sembilan', count: 645 },
-    { state: 'Melaka', count: 534 },
-    { state: 'Terengganu', count: 489 },
-    { state: 'Perlis', count: 378 },
-    { state: 'Sabah', count: 312 },
-    { state: 'Sarawak', count: 289 },
-  ];
+  // Calculate totals
+  const totalRecipients = summaryStats.totalRecipients;
+  const maxDistrictCount = Math.max(...districtDistribution.map(d => d.count));
+  const maxMonthly = Math.max(...monthlyData.map(m => m.count));
 
-  // Monthly trend data
-  const monthlyTrend = [
-    { month: 'Jan-23', count: 678 },
-    { month: 'Feb-23', count: 723 },
-    { month: 'Mar-23', count: 645 },
-    { month: 'Apr-23', count: 812 },
-    { month: 'May-23', count: 756 },
-    { month: 'Jun-23', count: 891 },
-    { month: 'Jul-23', count: 734 },
-    { month: 'Aug-23', count: 823 },
-    { month: 'Sep-23', count: 698 },
-    { month: 'Oct-23', count: 867 },
-    { month: 'Nov-23', count: 945 },
-    { month: 'Dec-23', count: 723 },
-    { month: 'Jan-24', count: 789 },
-    { month: 'Feb-24', count: 834 },
-  ];
-
-  const maxCount = Math.max(...recipientsByState.map(s => s.count));
-  const maxMonthly = Math.max(...monthlyTrend.map(m => m.count));
-  const totalRecipients = recipientsByCategory.reduce((sum, cat) => sum + cat.value, 0);
-
-  // Calculate donut chart
+  // Calculate donut chart for district distribution
   const radius = 70;
-  const circumference = 2 * Math.PI * radius;
   let currentAngle = -90;
 
-  const donutSegments = recipientsByCategory.map(cat => {
-    const angle = (cat.value / totalRecipients) * 360;
+  const colors = ['#ef4444', '#3b82f6', '#eab308', '#22c55e', '#8b5cf6', '#f97316', '#06b6d4', '#ec4899', '#84cc16', '#6366f1', '#14b8a6', '#f43f5e'];
+
+  const donutSegments = districtDistribution.map((district, index) => {
+    const percentage = (district.count / totalRecipients) * 100;
+    const angle = (district.count / totalRecipients) * 360;
     const startAngle = currentAngle;
     currentAngle += angle;
     
@@ -74,7 +47,9 @@ export default function Statistics() {
     const largeArc = angle > 180 ? 1 : 0;
     
     return {
-      ...cat,
+      ...district,
+      percentage: percentage.toFixed(1),
+      color: colors[index % colors.length],
       path: `M 90 90 L ${startX} ${startY} A ${radius} ${radius} 0 ${largeArc} 1 ${endX} ${endY} Z`
     };
   });
@@ -90,7 +65,7 @@ export default function Statistics() {
           <div className="mb-6">
             <h1 className="text-2xl font-bold text-gray-900 mb-1">Statistics: Zakat Recipients by Location</h1>
             <p className="text-sm text-gray-600">
-              Interactive map and visual analytics of zakat recipient distribution across Malaysia
+              Real data analysis of {totalRecipients.toLocaleString()} zakat recipients distribution across Kedah districts
             </p>
           </div>
 
@@ -101,15 +76,14 @@ export default function Statistics() {
               onChange={(e) => setSelectedDaerah(e.target.value)}
               className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900"
             >
-              <option value="all">All Daerah</option>
-              <option value="petaling">Petaling</option>
-              <option value="klang">Klang</option>
-              <option value="gombak">Gombak</option>
-              <option value="hulu-langat">Hulu Langat</option>
+              <option value="all">All Districts (Daerah)</option>
+              {districtDistribution.map((d) => (
+                <option key={d.code} value={d.code}>{d.name} ({d.code})</option>
+              ))}
             </select>
             <select 
               value={selectedYear}
-              onChange={(e) => setSelectedYear(e.target.value)}
+              onChange={(e) => setSelectedYear(e.target.value as '2022' | '2023' | '2024')}
               className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900"
             >
               <option value="2024">2024</option>
@@ -123,37 +97,55 @@ export default function Statistics() {
             {/* Map Section (Left) */}
             <div className="lg:col-span-2 bg-white rounded-xl p-6 border border-gray-200">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">Malaysia - Recipients Map</h2>
-                <button className="px-3 py-1 bg-gray-900 text-white text-xs rounded hover:bg-gray-800 transition-colors">
-                  Published
-                </button>
+                <h2 className="text-lg font-semibold text-gray-900">Kedah Districts - Recipients Distribution</h2>
+                <span className="px-3 py-1 bg-teal-100 text-teal-700 text-xs font-medium rounded">
+                  {districtDistribution.length} Districts
+                </span>
               </div>
               
-              {/* Map Placeholder */}
-              <div className="relative bg-gray-50 rounded-lg h-96 flex items-center justify-center border border-gray-200">
-                <div className="text-center">
-                  <svg className="w-24 h-24 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                  </svg>
-                  <p className="text-gray-700 text-sm mb-2">Interactive Map View</p>
-                  <p className="text-gray-500 text-xs">Recipients distribution across Malaysian states and daerah</p>
-                  <p className="text-gray-400 text-xs mt-4">* Map visualization requires external mapping library (e.g., Mapbox, Google Maps)</p>
-                </div>
+              {/* District Bars */}
+              <div className="space-y-3 mb-6">
+                {districtDistribution.map((district, index) => (
+                  <div key={index}>
+                    <div className="flex items-center justify-between mb-1">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded" style={{ backgroundColor: colors[index % colors.length] }}></div>
+                        <span className="text-sm font-medium text-gray-700">{district.name} ({district.code})</span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-sm font-semibold text-gray-900">{district.count.toLocaleString()}</span>
+                        <span className="text-xs text-gray-500 ml-2">({district.percentage}%)</span>
+                      </div>
+                    </div>
+                    <div className="w-full bg-gray-100 rounded-full h-3">
+                      <div 
+                        className="h-3 rounded-full transition-all"
+                        style={{ 
+                          width: `${(district.count / maxDistrictCount) * 100}%`,
+                          backgroundColor: colors[index % colors.length]
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
               </div>
 
-              <div className="mt-4 flex items-center justify-between text-xs text-gray-600">
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    <span>High Density</span>
+              <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <p className="text-xs text-gray-500">Highest</p>
+                    <p className="text-sm font-semibold text-gray-900">{districtDistribution[0].name}</p>
+                    <p className="text-xs text-teal-600">{districtDistribution[0].count.toLocaleString()} recipients</p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                    <span>Medium Density</span>
+                  <div>
+                    <p className="text-xs text-gray-500">Total Districts</p>
+                    <p className="text-sm font-semibold text-gray-900">{districtDistribution.length}</p>
+                    <p className="text-xs text-gray-600">Kedah State</p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                    <span>Low Density</span>
+                  <div>
+                    <p className="text-xs text-gray-500">Lowest</p>
+                    <p className="text-sm font-semibold text-gray-900">{districtDistribution[districtDistribution.length - 1].name}</p>
+                    <p className="text-xs text-orange-600">{districtDistribution[districtDistribution.length - 1].count.toLocaleString()} recipients</p>
                   </div>
                 </div>
               </div>
@@ -165,7 +157,7 @@ export default function Statistics() {
               {/* Donut Chart - Recipients by Daerah */}
               <div className="bg-white rounded-xl p-6 border border-gray-200">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-base font-semibold text-gray-900">Recipients by Daerah</h3>
+                  <h3 className="text-base font-semibold text-gray-900">District Distribution</h3>
                 </div>
                 
                 <div className="flex flex-col items-center">
@@ -187,120 +179,195 @@ export default function Statistics() {
                     </div>
                   </div>
                   
-                  <div className="mt-4 space-y-2 w-full">
-                    {recipientsByCategory.map((cat, index) => (
+                  <div className="mt-4 space-y-2 w-full max-h-32 overflow-y-auto">
+                    {donutSegments.slice(0, 6).map((segment, index) => (
                       <div key={index} className="flex items-center justify-between text-xs">
                         <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 rounded" style={{ backgroundColor: cat.color }}></div>
-                          <span className="text-gray-700">{cat.name}</span>
+                          <div className="w-3 h-3 rounded" style={{ backgroundColor: segment.color }}></div>
+                          <span className="text-gray-700">{segment.name}</span>
                         </div>
-                        <span className="text-gray-600">{cat.percentage}%</span>
+                        <span className="text-gray-600">{segment.percentage}%</span>
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
 
-              {/* Bar Chart - Recipients by State */}
+              {/* Gender Split */}
               <div className="bg-white rounded-xl p-6 border border-gray-200">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-base font-semibold text-gray-900">States</h3>
-                </div>
-                
-                <div className="h-48 flex items-end justify-between gap-1">
-                  {recipientsByState.map((state, index) => {
-                    const height = (state.count / maxCount) * 100;
-                    const colors = ['#eab308', '#f97316', '#3b82f6', '#8b5cf6', '#ef4444', '#22c55e'];
-                    return (
-                      <div key={index} className="flex-1 flex flex-col items-center">
+                <h3 className="text-base font-semibold text-gray-900 mb-4">Gender Distribution</h3>
+                <div className="space-y-3">
+                  {genderDistribution.map((item, index) => (
+                    <div key={index}>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm text-gray-700">{item.label}</span>
+                        <span className="text-sm font-semibold text-gray-900">{item.percentage}%</span>
+                      </div>
+                      <div className="w-full bg-gray-100 rounded-full h-3">
                         <div 
-                          className="w-full rounded-t transition-all hover:opacity-80"
-                          style={{ 
-                            height: `${height}%`,
-                            backgroundColor: colors[index % colors.length]
-                          }}
+                          className={`h-3 rounded-full ${index === 0 ? 'bg-pink-500' : 'bg-blue-500'}`}
+                          style={{ width: `${item.percentage}%` }}
                         ></div>
                       </div>
-                    );
-                  })}
-                </div>
-                <div className="mt-2 flex justify-between text-xs text-gray-500 overflow-x-auto">
-                  {recipientsByState.map((state, index) => (
-                    <span key={index} className="flex-1 text-center truncate" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)', fontSize: '9px' }}>
-                      {state.state}
-                    </span>
+                    </div>
                   ))}
                 </div>
               </div>
-
             </div>
-
           </div>
 
-          {/* Monthly Trend Chart - Full Width */}
-          <div className="mt-6 bg-white rounded-xl p-6 border border-gray-200">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-base font-semibold text-gray-900">Recipients Trend</h3>
-            </div>
+          {/* Bottom Charts */}
+          <div className="grid lg:grid-cols-2 gap-6 mt-6">
             
-            <div className="relative h-48">
-              <svg className="w-full h-full" preserveAspectRatio="none">
-                <defs>
-                  <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#22c55e" stopOpacity="0.3" />
-                    <stop offset="100%" stopColor="#22c55e" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                
-                {/* Area under the line */}
-                <path
-                  d={`M 0,${192 - (monthlyTrend[0].count / maxMonthly) * 160} ${monthlyTrend.map((m, i) => {
-                    const x = (i / (monthlyTrend.length - 1)) * 100;
-                    const y = 192 - (m.count / maxMonthly) * 160;
-                    return `L ${x}%,${y}`;
-                  }).join(' ')} L 100%,192 L 0,192 Z`}
-                  fill="url(#lineGradient)"
-                />
-                
-                {/* Line */}
-                <polyline
-                  points={monthlyTrend.map((m, i) => {
-                    const x = (i / (monthlyTrend.length - 1)) * 100;
-                    const y = 192 - (m.count / maxMonthly) * 160;
-                    return `${x}%,${y}`;
-                  }).join(' ')}
-                  fill="none"
-                  stroke="#22c55e"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  vectorEffect="non-scaling-stroke"
-                />
-                
-                {/* Points */}
-                {monthlyTrend.map((m, i) => {
-                  const x = (i / (monthlyTrend.length - 1)) * 100;
-                  const y = 192 - (m.count / maxMonthly) * 160;
+            {/* Monthly Trend */}
+            <div className="bg-white rounded-xl p-6 border border-gray-200">
+              <h3 className="text-base font-semibold text-gray-900 mb-2">Monthly Recipients ({selectedYear})</h3>
+              <p className="text-xs text-gray-500 mb-4">Distribution trend throughout the year</p>
+              <div className="flex items-end justify-between h-48 gap-1">
+                {monthlyData.map((data, index) => (
+                  <div key={index} className="flex flex-col items-center flex-1">
+                    <div className="w-full bg-gray-100 rounded-t relative" style={{ height: '100%' }}>
+                      <div 
+                        className="absolute bottom-0 w-full bg-teal-500 rounded-t transition-all hover:bg-teal-600"
+                        style={{ height: `${(data.count / maxMonthly) * 100}%` }}
+                        title={`${data.month}: ${data.count.toLocaleString()}`}
+                      ></div>
+                    </div>
+                    <span className="text-xs text-gray-600 mt-2">{data.month.slice(0, 3)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Age Distribution */}
+            <div className="bg-white rounded-xl p-6 border border-gray-200">
+              <h3 className="text-base font-semibold text-gray-900 mb-2">Age Group Distribution</h3>
+              <p className="text-xs text-gray-500 mb-4">Recipients by age category (Avg: {summaryStats.averageAge} years)</p>
+              <div className="flex items-end justify-around h-48">
+                {ageGroupDistribution.map((item, index) => {
+                  const maxAge = Math.max(...ageGroupDistribution.map(a => a.count));
+                  const colors = ['bg-indigo-300', 'bg-indigo-400', 'bg-indigo-500', 'bg-indigo-600', 'bg-indigo-700'];
                   return (
-                    <circle
-                      key={i}
-                      cx={`${x}%`}
-                      cy={y}
-                      r="3"
-                      fill="#22c55e"
-                      stroke="white"
-                      strokeWidth="2"
-                    />
+                    <div key={index} className="flex flex-col items-center">
+                      <span className="text-xs font-semibold text-gray-900 mb-1">{item.count.toLocaleString()}</span>
+                      <div 
+                        className={`w-12 ${colors[index]} rounded-t transition-all`}
+                        style={{ height: `${(item.count / maxAge) * 140}px` }}
+                      ></div>
+                      <span className="text-xs text-gray-600 mt-2">{item.ageGroup}</span>
+                    </div>
                   );
                 })}
-              </svg>
+              </div>
             </div>
+          </div>
+
+          {/* Additional Stats */}
+          <div className="grid lg:grid-cols-3 gap-6 mt-6">
             
-            <div className="mt-4 flex justify-between text-xs text-gray-500 overflow-x-auto">
-              {monthlyTrend.map((m, index) => (
-                <span key={index} className="flex-shrink-0 px-1">{m.month}</span>
-              ))}
+            {/* Health Status */}
+            <div className="bg-white rounded-xl p-6 border border-gray-200">
+              <h3 className="text-base font-semibold text-gray-900 mb-4">Health Status</h3>
+              <div className="space-y-3">
+                {healthStatusDistribution.map((item, index) => {
+                  const statusColors = ['bg-green-500', 'bg-yellow-500', 'bg-orange-500', 'bg-red-500', 'bg-purple-500'];
+                  return (
+                    <div key={index}>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm text-gray-700">{item.label}</span>
+                        <span className="text-sm font-semibold text-gray-900">{item.count.toLocaleString()}</span>
+                      </div>
+                      <div className="w-full bg-gray-100 rounded-full h-2">
+                        <div 
+                          className={`h-2 rounded-full ${statusColors[index]}`}
+                          style={{ width: `${item.percentage}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
+
+            {/* Employment Status */}
+            <div className="bg-white rounded-xl p-6 border border-gray-200">
+              <h3 className="text-base font-semibold text-gray-900 mb-4">Employment Status</h3>
+              <div className="space-y-3">
+                {jobTypeDistribution.map((item, index) => (
+                  <div key={index}>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-sm text-gray-700">{item.label}</span>
+                      <span className="text-sm font-semibold text-gray-900">{item.percentage}%</span>
+                    </div>
+                    <div className="w-full bg-gray-100 rounded-full h-2">
+                      <div 
+                        className="h-2 rounded-full bg-blue-500"
+                        style={{ width: `${item.percentage}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Yearly Comparison */}
+            <div className="bg-white rounded-xl p-6 border border-gray-200">
+              <h3 className="text-base font-semibold text-gray-900 mb-4">Yearly Comparison</h3>
+              <div className="space-y-4">
+                {yearlyBreakdown.map((item, index) => {
+                  const maxYearly = Math.max(...yearlyBreakdown.map(y => y.recipients));
+                  const yearColors = ['bg-teal-400', 'bg-teal-500', 'bg-teal-600'];
+                  return (
+                    <div key={index}>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm font-medium text-gray-700">{item.year}</span>
+                        <span className="text-sm font-semibold text-gray-900">{item.recipients.toLocaleString()}</span>
+                      </div>
+                      <div className="w-full bg-gray-100 rounded-full h-4">
+                        <div 
+                          className={`h-4 rounded-full ${yearColors[index]}`}
+                          style={{ width: `${(item.recipients / maxYearly) * 100}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="mt-4 pt-4 border-t border-gray-100">
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">Total (2022-2024)</span>
+                  <span className="text-sm font-bold text-gray-900">{totalRecipients.toLocaleString()}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Summary Cards */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+            <div className="bg-gray-50 rounded-lg p-4 text-center">
+              <p className="text-xs text-gray-500">Total Recipients</p>
+              <p className="text-xl font-bold text-gray-900">{totalRecipients.toLocaleString()}</p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-4 text-center">
+              <p className="text-xs text-gray-500">Total Districts</p>
+              <p className="text-xl font-bold text-gray-900">{districtDistribution.length}</p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-4 text-center">
+              <p className="text-xs text-gray-500">Avg. Income</p>
+              <p className="text-xl font-bold text-green-600">RM {summaryStats.averageIncome.toFixed(0)}</p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-4 text-center">
+              <p className="text-xs text-gray-500">Avg. Expenses</p>
+              <p className="text-xl font-bold text-red-600">RM {summaryStats.averageExpenses.toFixed(0)}</p>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="mt-8 p-4 bg-gray-50 rounded-lg">
+            <p className="text-xs text-gray-500 text-center">
+              Data source: Zakat Data.xlsx | Total Records: {totalRecipients.toLocaleString()} | 
+              Period: 2022-2024 | State: Kedah | Location-based Statistics
+            </p>
           </div>
 
         </div>

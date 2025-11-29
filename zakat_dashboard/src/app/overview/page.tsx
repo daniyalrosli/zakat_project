@@ -1,57 +1,40 @@
 'use client';
 
 import Navbar from '@/components/navbar';
-import { DollarSign, TrendingUp, Users, Calendar, Plus } from 'lucide-react';
-import { useState } from 'react';
+import { DollarSign, TrendingUp, Users, MapPin } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import {
+  districtDistribution,
+  jobTypeDistribution,
+  healthStatusDistribution,
+  ageGroupDistribution,
+  yearlyBreakdown,
+  summaryStats,
+  monthlyDistribution,
+  incomeStatistics,
+} from '@/data/zakatData';
 
 export default function Overview() {
-  const [selectedYear, setSelectedYear] = useState('2024');
-  const [selectedLocation, setSelectedLocation] = useState('all');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedYear, setSelectedYear] = useState<'2022' | '2023' | '2024'>('2024');
+  const [selectedDistrict, setSelectedDistrict] = useState('all');
 
-  // Monthly zakat data
-  const monthlyData = [
-    { month: 'Jan', amount: 3200 },
-    { month: 'Feb', amount: 4500 },
-    { month: 'Mar', amount: 3800 },
-    { month: 'Apr', amount: 3600 },
-    { month: 'May', amount: 3200 },
-    { month: 'Jun', amount: 3400 },
-    { month: 'Jul', amount: 3100 },
-    { month: 'Aug', amount: 3900 },
-    { month: 'Sep', amount: 3500 },
-    { month: 'Oct', amount: 4200 },
-    { month: 'Nov', amount: 4800 },
-    { month: 'Dec', amount: 3600 },
-  ];
+  // Get monthly data for selected year
+  const monthlyData = useMemo(() => {
+    return monthlyDistribution[selectedYear] || monthlyDistribution['2024'];
+  }, [selectedYear]);
 
-  // Zakat by category
-  const zakatByCategory = [
-    { name: 'Poor & Needy', amount: 18500, color: 'bg-teal-500' },
-    { name: 'Education', amount: 12300, color: 'bg-teal-400' },
-    { name: 'Medical Aid', amount: 8450, color: 'bg-teal-300' },
-    { name: 'Infrastructure', amount: 5980, color: 'bg-teal-200' },
-    { name: 'Debt Relief', amount: 3800, color: 'bg-teal-100' },
-  ];
+  // Calculate totals for selected year
+  const yearData = useMemo(() => {
+    const year = yearlyBreakdown.find(y => y.year === parseInt(selectedYear));
+    return year || yearlyBreakdown[2];
+  }, [selectedYear]);
 
-  // Recipients by location
-  const recipientsByLocation = [
-    { location: 'Kuala Lumpur', percentage: 35 },
-    { location: 'Penang', percentage: 28 },
-    { location: 'Johor', percentage: 18 },
-    { location: 'Selangor', percentage: 12 },
-    { location: 'Perak', percentage: 7 },
-  ];
+  const maxMonthlyCount = Math.max(...monthlyData.map(d => d.count));
+  const totalYearlyRecipients = yearData.recipients;
 
-  const currentZakat = 45230;
-  const zakatGoal = 70000;
-  const zakatPercentage = Math.round((currentZakat / zakatGoal) * 100);
-
-  const pipelineValue = 12450;
-  const pipelineGoal = 50000;
-  const pipelinePercentage = Math.round((pipelineValue / pipelineGoal) * 100);
-
-  const maxAmount = Math.max(...monthlyData.map(d => d.amount));
+  // Top 5 districts for horizontal bar
+  const topDistricts = districtDistribution.slice(0, 5);
+  const maxDistrictCount = Math.max(...topDistricts.map(d => d.count));
 
   return (
     <div className="min-h-screen bg-white">
@@ -64,35 +47,25 @@ export default function Overview() {
           <div className="mb-6">
             <h1 className="text-2xl font-bold text-gray-900 mb-1">Zakat Distribution Dashboard</h1>
             <p className="text-sm text-gray-600">
-              Track zakat collections, distributions, and recipients across regions. View trends and forecasts to optimize reach.
+              Real data from Zakat recipients in Kedah. Total of {summaryStats.totalRecipients.toLocaleString()} recipients across {summaryStats.totalDistricts} districts.
             </p>
           </div>
 
           {/* Filters */}
           <div className="flex flex-wrap gap-3 mb-8">
             <select 
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
+              value={selectedDistrict}
+              onChange={(e) => setSelectedDistrict(e.target.value)}
               className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900"
             >
-              <option value="all">All Categories</option>
-              <option value="poor">Poor & Needy</option>
-              <option value="education">Education</option>
-              <option value="medical">Medical Aid</option>
-            </select>
-            <select 
-              value={selectedLocation}
-              onChange={(e) => setSelectedLocation(e.target.value)}
-              className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900"
-            >
-              <option value="all">All Locations</option>
-              <option value="kl">Kuala Lumpur</option>
-              <option value="penang">Penang</option>
-              <option value="johor">Johor</option>
+              <option value="all">All Districts</option>
+              {districtDistribution.map((d) => (
+                <option key={d.code} value={d.code}>{d.name} ({d.code})</option>
+              ))}
             </select>
             <select 
               value={selectedYear}
-              onChange={(e) => setSelectedYear(e.target.value)}
+              onChange={(e) => setSelectedYear(e.target.value as '2022' | '2023' | '2024')}
               className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900"
             >
               <option value="2024">2024</option>
@@ -101,149 +74,92 @@ export default function Overview() {
             </select>
           </div>
 
+          {/* Summary Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div className="bg-white border border-gray-200 rounded-lg p-5">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-teal-100 rounded-lg">
+                  <Users size={20} className="text-teal-600" />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Total Recipients ({selectedYear})</p>
+                  <p className="text-xl font-bold text-gray-900">{totalYearlyRecipients.toLocaleString()}</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white border border-gray-200 rounded-lg p-5">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <DollarSign size={20} className="text-blue-600" />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Avg. Income</p>
+                  <p className="text-xl font-bold text-gray-900">RM {summaryStats.averageIncome.toFixed(2)}</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white border border-gray-200 rounded-lg p-5">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-red-100 rounded-lg">
+                  <TrendingUp size={20} className="text-red-600" />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Avg. Expenses</p>
+                  <p className="text-xl font-bold text-gray-900">RM {summaryStats.averageExpenses.toFixed(2)}</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white border border-gray-200 rounded-lg p-5">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-purple-100 rounded-lg">
+                  <MapPin size={20} className="text-purple-600" />
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Districts Covered</p>
+                  <p className="text-xl font-bold text-gray-900">{summaryStats.totalDistricts}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Main Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
-            {/* Row 1: New Recipients by Month */}
+            {/* Row 1: Monthly Recipients */}
             <div className="lg:col-span-1 bg-white border border-gray-200 rounded-lg p-6">
-              <h3 className="text-base font-semibold text-gray-900 mb-6">New Recipients by Month</h3>
-              <div className="flex items-end justify-between h-48 gap-2">
+              <h3 className="text-base font-semibold text-gray-900 mb-2">Recipients by Month ({selectedYear})</h3>
+              <p className="text-xs text-gray-500 mb-4">Monthly distribution of zakat recipients</p>
+              <div className="flex items-end justify-between h-48 gap-1">
                 {monthlyData.map((data, index) => (
                   <div key={index} className="flex flex-col items-center flex-1">
                     <div className="w-full bg-gray-100 rounded-t relative" style={{ height: '100%' }}>
                       <div 
-                        className="absolute bottom-0 w-full bg-red-400 rounded-t transition-all"
-                        style={{ height: `${(data.amount / maxAmount) * 100}%` }}
+                        className="absolute bottom-0 w-full bg-teal-500 rounded-t transition-all hover:bg-teal-600"
+                        style={{ height: `${(data.count / maxMonthlyCount) * 100}%` }}
+                        title={`${data.month}: ${data.count.toLocaleString()} recipients`}
                       ></div>
                     </div>
-                    <span className="text-xs text-gray-600 mt-2">{data.month}</span>
+                    <span className="text-xs text-gray-600 mt-2">{data.month.slice(0, 3)}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Row 1: Zakat by Category */}
+            {/* Row 1: Top Districts */}
             <div className="lg:col-span-1 bg-white border border-gray-200 rounded-lg p-6">
-              <h3 className="text-base font-semibold text-gray-900 mb-6">Zakat by Category</h3>
-              <div className="space-y-1 mb-4">
-                {zakatByCategory.map((item, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <div className="flex-1 bg-gray-100 h-12 rounded relative overflow-hidden">
-                      <div 
-                        className={`absolute left-0 top-0 h-full ${item.color} flex items-center justify-between px-3 transition-all`}
-                        style={{ width: `${(item.amount / zakatByCategory[0].amount) * 100}%` }}
-                      >
-                        <span className="text-xs font-medium text-gray-800">{item.name}</span>
-                        <span className="text-xs font-semibold text-gray-900">RM {item.amount.toLocaleString()}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Row 1: Zakat for Current Month */}
-            <div className="lg:col-span-1 bg-white border border-gray-200 rounded-lg p-6">
-              <h3 className="text-base font-semibold text-gray-900 mb-6">Zakat for Current Month</h3>
-              <div className="flex flex-col items-center justify-center">
-                <div className="relative w-40 h-40">
-                  <svg className="w-full h-full transform -rotate-90">
-                    <circle
-                      cx="80"
-                      cy="80"
-                      r="70"
-                      fill="none"
-                      stroke="#fee2e2"
-                      strokeWidth="20"
-                    />
-                    <circle
-                      cx="80"
-                      cy="80"
-                      r="70"
-                      fill="none"
-                      stroke="#f87171"
-                      strokeWidth="20"
-                      strokeDasharray={`${2 * Math.PI * 70}`}
-                      strokeDashoffset={`${2 * Math.PI * 70 * (1 - zakatPercentage / 100)}`}
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-3xl font-bold text-gray-900">{zakatPercentage}%</span>
-                  </div>
-                </div>
-                <div className="flex gap-4 mt-6">
-                  <div className="text-center">
-                    <p className="text-xs text-gray-600 mb-1">Collected</p>
-                    <p className="px-4 py-1.5 bg-red-100 text-red-700 text-sm font-semibold rounded">
-                      RM {currentZakat.toLocaleString()}
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-xs text-gray-600 mb-1">Goal</p>
-                    <p className="px-4 py-1.5 bg-red-100 text-red-700 text-sm font-semibold rounded">
-                      RM {zakatGoal.toLocaleString()}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Row 2: Forecast for Current Month */}
-            <div className="lg:col-span-1 bg-white border border-gray-200 rounded-lg p-6">
-              <h3 className="text-base font-semibold text-gray-900 mb-6">Forecast for Current Month</h3>
-              <div className="h-48 flex items-center justify-center">
-                <div className="relative w-full max-w-xs">
-                  <div className="flex items-end justify-center gap-1 h-40">
-                    <div className="flex flex-col items-center flex-1">
-                      <div className="w-full flex flex-col justify-end h-full">
-                        <div className="w-full bg-red-400 h-1/3 rounded-t mb-1"></div>
-                        <div className="text-center">
-                          <p className="text-xs font-medium text-gray-700">Goal</p>
-                          <p className="text-xs text-gray-500">RM 50K</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-center flex-1">
-                      <div className="w-full flex flex-col justify-end h-full">
-                        <div className="w-full bg-teal-500 h-2/3 rounded-t mb-1"></div>
-                        <div className="text-center">
-                          <p className="text-xs font-medium text-gray-700">Pending Forecast</p>
-                          <p className="text-xs text-gray-500">RM 38.9K</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-center flex-1">
-                      <div className="w-full flex flex-col justify-end h-full">
-                        <div className="w-full bg-pink-300 h-1/2 rounded-t mb-1"></div>
-                        <div className="text-center">
-                          <p className="text-xs font-medium text-gray-700">Collected</p>
-                          <p className="text-xs text-gray-500">RM 45.2K</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-center mt-2">
-                    <p className="text-sm text-gray-600">Total Forecast Value</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Row 2: Recipients by Location */}
-            <div className="lg:col-span-1 bg-white border border-gray-200 rounded-lg p-6">
-              <h3 className="text-base font-semibold text-gray-900 mb-6">Recipients by Location</h3>
-              <div className="space-y-4">
-                {recipientsByLocation.map((item, index) => (
+              <h3 className="text-base font-semibold text-gray-900 mb-2">Recipients by District</h3>
+              <p className="text-xs text-gray-500 mb-4">Top 5 districts with most recipients</p>
+              <div className="space-y-3">
+                {topDistricts.map((item, index) => (
                   <div key={index}>
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm font-medium text-gray-700">{item.location}</span>
-                      <span className="text-sm font-semibold text-gray-900">{item.percentage}%</span>
+                      <span className="text-sm font-medium text-gray-700">{item.name}</span>
+                      <span className="text-sm font-semibold text-gray-900">{item.count.toLocaleString()}</span>
                     </div>
-                    <div className="w-full bg-gray-100 rounded-full h-2">
+                    <div className="w-full bg-gray-100 rounded-full h-3">
                       <div 
-                        className="bg-teal-500 h-2 rounded-full transition-all"
-                        style={{ width: `${item.percentage}%` }}
+                        className="bg-teal-500 h-3 rounded-full transition-all"
+                        style={{ width: `${(item.count / maxDistrictCount) * 100}%` }}
                       ></div>
                     </div>
                   </div>
@@ -251,9 +167,10 @@ export default function Overview() {
               </div>
             </div>
 
-            {/* Row 2: Pipeline Coverage for Next Month */}
+            {/* Row 1: Gender Distribution */}
             <div className="lg:col-span-1 bg-white border border-gray-200 rounded-lg p-6">
-              <h3 className="text-base font-semibold text-gray-900 mb-6">Pipeline Coverage for Next Month</h3>
+              <h3 className="text-base font-semibold text-gray-900 mb-2">Gender Distribution</h3>
+              <p className="text-xs text-gray-500 mb-4">Male vs Female recipients</p>
               <div className="flex flex-col items-center justify-center">
                 <div className="relative w-40 h-40">
                   <svg className="w-full h-full transform -rotate-90">
@@ -262,7 +179,7 @@ export default function Overview() {
                       cy="80"
                       r="70"
                       fill="none"
-                      stroke="#fee2e2"
+                      stroke="#fecaca"
                       strokeWidth="20"
                     />
                     <circle
@@ -273,26 +190,162 @@ export default function Overview() {
                       stroke="#f87171"
                       strokeWidth="20"
                       strokeDasharray={`${2 * Math.PI * 70}`}
-                      strokeDashoffset={`${2 * Math.PI * 70 * (1 - pipelinePercentage / 100)}`}
+                      strokeDashoffset={`${2 * Math.PI * 70 * (1 - summaryStats.femalePercentage / 100)}`}
                       strokeLinecap="round"
                     />
                   </svg>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-3xl font-bold text-gray-900">{pipelinePercentage}%</span>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <span className="text-2xl font-bold text-gray-900">{summaryStats.femalePercentage}%</span>
+                    <span className="text-xs text-gray-500">Female</span>
                   </div>
                 </div>
-                <div className="text-center mt-6">
-                  <p className="text-xs text-gray-600 mb-2">Current Pipeline Value</p>
-                  <p className="px-6 py-2 bg-red-100 text-red-700 text-lg font-semibold rounded">
-                    RM {pipelineValue.toLocaleString()}
-                  </p>
-                  <button className="mt-3 text-xs text-gray-500 underline hover:text-gray-700">
-                    Add next here
-                  </button>
+                <div className="flex gap-6 mt-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                    <span className="text-sm text-gray-600">Female ({summaryStats.femalePercentage}%)</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-red-200"></div>
+                    <span className="text-sm text-gray-600">Male ({summaryStats.malePercentage}%)</span>
+                  </div>
                 </div>
               </div>
             </div>
 
+            {/* Row 2: Job Type Distribution */}
+            <div className="lg:col-span-1 bg-white border border-gray-200 rounded-lg p-6">
+              <h3 className="text-base font-semibold text-gray-900 mb-2">Employment Status</h3>
+              <p className="text-xs text-gray-500 mb-4">Recipients by job type</p>
+              <div className="space-y-2">
+                {jobTypeDistribution.map((item, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <div className="flex-1 bg-gray-100 h-10 rounded relative overflow-hidden">
+                      <div 
+                        className="absolute left-0 top-0 h-full bg-blue-400 flex items-center justify-between px-3 transition-all"
+                        style={{ width: `${(item.count / jobTypeDistribution[0].count) * 100}%`, minWidth: '120px' }}
+                      >
+                        <span className="text-xs font-medium text-gray-800 truncate">{item.label}</span>
+                      </div>
+                    </div>
+                    <span className="text-xs font-semibold text-gray-700 w-16 text-right">{item.percentage}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Row 2: Health Status */}
+            <div className="lg:col-span-1 bg-white border border-gray-200 rounded-lg p-6">
+              <h3 className="text-base font-semibold text-gray-900 mb-2">Health Status</h3>
+              <p className="text-xs text-gray-500 mb-4">Recipients by health condition</p>
+              <div className="space-y-2">
+                {healthStatusDistribution.map((item, index) => {
+                  const colors = ['bg-green-500', 'bg-yellow-500', 'bg-orange-500', 'bg-red-500', 'bg-purple-500'];
+                  return (
+                    <div key={index} className="flex items-center gap-2">
+                      <div className="flex-1 bg-gray-100 h-10 rounded relative overflow-hidden">
+                        <div 
+                          className={`absolute left-0 top-0 h-full ${colors[index]} flex items-center px-3 transition-all`}
+                          style={{ width: `${item.percentage}%`, minWidth: '100px' }}
+                        >
+                          <span className="text-xs font-medium text-white truncate">{item.label}</span>
+                        </div>
+                      </div>
+                      <span className="text-xs font-semibold text-gray-700 w-20 text-right">{item.count.toLocaleString()}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Row 2: Age Group Distribution */}
+            <div className="lg:col-span-1 bg-white border border-gray-200 rounded-lg p-6">
+              <h3 className="text-base font-semibold text-gray-900 mb-2">Age Distribution</h3>
+              <p className="text-xs text-gray-500 mb-4">Recipients by age group (Avg: {summaryStats.averageAge} years)</p>
+              <div className="space-y-2">
+                {ageGroupDistribution.map((item, index) => {
+                  const maxAge = Math.max(...ageGroupDistribution.map(a => a.count));
+                  const colors = ['bg-indigo-300', 'bg-indigo-400', 'bg-indigo-500', 'bg-indigo-600', 'bg-indigo-700'];
+                  return (
+                    <div key={index} className="flex items-center gap-2">
+                      <span className="text-xs text-gray-600 w-12">{item.ageGroup}</span>
+                      <div className="flex-1 bg-gray-100 h-8 rounded relative overflow-hidden">
+                        <div 
+                          className={`absolute left-0 top-0 h-full ${colors[index]} transition-all`}
+                          style={{ width: `${(item.count / maxAge) * 100}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-xs font-semibold text-gray-700 w-16 text-right">{item.count.toLocaleString()}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Row 3: Yearly Comparison */}
+            <div className="lg:col-span-2 bg-white border border-gray-200 rounded-lg p-6">
+              <h3 className="text-base font-semibold text-gray-900 mb-2">Yearly Recipients Comparison</h3>
+              <p className="text-xs text-gray-500 mb-4">Total recipients across years (2022-2024)</p>
+              <div className="flex items-end justify-around h-48 gap-8">
+                {yearlyBreakdown.map((data, index) => {
+                  const maxYearly = Math.max(...yearlyBreakdown.map(y => y.recipients));
+                  const colors = ['bg-teal-400', 'bg-teal-500', 'bg-teal-600'];
+                  return (
+                    <div key={index} className="flex flex-col items-center">
+                      <span className="text-sm font-semibold text-gray-900 mb-2">{data.recipients.toLocaleString()}</span>
+                      <div 
+                        className={`w-20 ${colors[index]} rounded-t transition-all`}
+                        style={{ height: `${(data.recipients / maxYearly) * 150}px` }}
+                      ></div>
+                      <span className="text-sm font-medium text-gray-700 mt-2">{data.year}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Row 3: Income vs Expenses */}
+            <div className="lg:col-span-1 bg-white border border-gray-200 rounded-lg p-6">
+              <h3 className="text-base font-semibold text-gray-900 mb-2">Income vs Expenses</h3>
+              <p className="text-xs text-gray-500 mb-4">Average monthly financial status</p>
+              <div className="space-y-6">
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <span className="text-sm text-gray-600">Average Income</span>
+                    <span className="text-sm font-semibold text-green-600">RM {incomeStatistics.totalIncome.mean.toFixed(2)}</span>
+                  </div>
+                  <div className="w-full bg-gray-100 rounded-full h-4">
+                    <div className="bg-green-500 h-4 rounded-full" style={{ width: '45%' }}></div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <span className="text-sm text-gray-600">Average Expenses</span>
+                    <span className="text-sm font-semibold text-red-600">RM {incomeStatistics.totalExpenses.mean.toFixed(2)}</span>
+                  </div>
+                  <div className="w-full bg-gray-100 rounded-full h-4">
+                    <div className="bg-red-500 h-4 rounded-full" style={{ width: '55%' }}></div>
+                  </div>
+                </div>
+                <div className="pt-4 border-t border-gray-100">
+                  <div className="flex justify-between">
+                    <span className="text-sm font-medium text-gray-700">Deficit</span>
+                    <span className="text-sm font-bold text-red-600">
+                      RM {(incomeStatistics.totalExpenses.mean - incomeStatistics.totalIncome.mean).toFixed(2)}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">Recipients earn less than they spend on average</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Footer Note */}
+          <div className="mt-8 p-4 bg-gray-50 rounded-lg">
+            <p className="text-xs text-gray-500 text-center">
+              Data source: Zakat Data.xlsx | Total Records: {summaryStats.totalRecipients.toLocaleString()} | 
+              Last updated: 2024 | Kedah State Zakat Distribution Data
+            </p>
           </div>
 
         </div>
