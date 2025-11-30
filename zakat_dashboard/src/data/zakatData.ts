@@ -118,13 +118,32 @@ export const featureImportance = [
   { rank: 10, feature: 'pdtDiri (Personal Income)', importance: 3.2 },
 ];
 
-// Model performance metrics
+// Model performance metrics - SVM (RBF Kernel) as primary model
 export const modelPerformance = [
-  { model: 'Gradient Boosting', accuracy: 90.8, precision: 80.6, recall: 100, rocAuc: 94.1, status: 'Best' },
-  { model: 'Random Forest', accuracy: 87.5, precision: 76.2, recall: 95, rocAuc: 90.3, status: 'Strong' },
-  { model: 'SVM (RBF)', accuracy: 85.6, precision: 74.1, recall: 92, rocAuc: 88.9, status: 'Good' },
-  { model: 'Logistic Regression', accuracy: 78.3, precision: 65.4, recall: 88, rocAuc: 81.2, status: 'Baseline' },
+  { model: 'SVM (RBF Kernel)', accuracy: 94.73, precision: 94.31, recall: 93.29, f1Score: 93.80, rocAuc: 98.96, status: 'Best' },
+  { model: 'Neural Network (MLP)', accuracy: 99.06, precision: 98.83, recall: 98.96, f1Score: 98.90, rocAuc: 99.95, status: 'Strong' },
+  { model: 'Logistic Regression', accuracy: 89.04, precision: 87.65, recall: 86.56, f1Score: 87.10, rocAuc: 95.07, status: 'Good' },
+  { model: 'K-Nearest Neighbors', accuracy: 81.24, precision: 79.15, recall: 76.16, f1Score: 77.63, rocAuc: 88.73, status: 'Baseline' },
+  { model: 'Gaussian Naive Bayes', accuracy: 63.87, precision: 54.75, recall: 89.15, f1Score: 67.84, rocAuc: 80.18, status: 'Weak' },
 ];
+
+// SVM Model specific metrics
+export const svmModelMetrics = {
+  name: 'SVM (RBF Kernel)',
+  accuracy: 94.73,
+  precision: 94.31,
+  recall: 93.29,
+  f1Score: 93.80,
+  rocAuc: 98.96,
+  confusionMatrix: {
+    trueNegative: 5701,
+    falsePositive: 250,
+    falseNegative: 298,
+    truePositive: 4144,
+  },
+  totalPredictions: 10393,
+  description: 'Support Vector Machine with Radial Basis Function kernel - robust against overfitting with excellent generalization',
+};
 
 // Asset ownership data (from the dataset)
 export const assetOwnership = [

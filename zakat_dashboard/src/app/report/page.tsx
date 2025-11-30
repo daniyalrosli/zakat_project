@@ -10,6 +10,7 @@ import {
   healthStatusDistribution,
   featureImportance,
   modelPerformance,
+  svmModelMetrics,
   districtDistribution,
   ageGroupDistribution,
   genderDistribution,
@@ -90,6 +91,60 @@ export default function Report() {
             <div className="flex items-center gap-2">
               <Filter size={18} className="text-gray-400" />
               <span className="text-sm text-gray-600">Data from Kedah State Zakat Board</span>
+            </div>
+          </div>
+
+          {/* SVM Model Highlight Card */}
+          <div className="bg-gradient-to-r from-purple-600 to-purple-800 rounded-xl p-6 mb-8 text-white">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+              <div className="mb-4 lg:mb-0">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="px-2 py-1 bg-white/20 rounded text-xs font-medium">BEST MODEL</span>
+                </div>
+                <h2 className="text-2xl font-bold mb-1">{svmModelMetrics.name}</h2>
+                <p className="text-purple-200 text-sm max-w-xl">{svmModelMetrics.description}</p>
+              </div>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="text-center p-3 bg-white/10 rounded-lg">
+                  <p className="text-2xl font-bold">{svmModelMetrics.accuracy}%</p>
+                  <p className="text-xs text-purple-200">Accuracy</p>
+                </div>
+                <div className="text-center p-3 bg-white/10 rounded-lg">
+                  <p className="text-2xl font-bold">{svmModelMetrics.precision}%</p>
+                  <p className="text-xs text-purple-200">Precision</p>
+                </div>
+                <div className="text-center p-3 bg-white/10 rounded-lg">
+                  <p className="text-2xl font-bold">{svmModelMetrics.recall}%</p>
+                  <p className="text-xs text-purple-200">Recall</p>
+                </div>
+                <div className="text-center p-3 bg-white/10 rounded-lg">
+                  <p className="text-2xl font-bold">{svmModelMetrics.rocAuc}%</p>
+                  <p className="text-xs text-purple-200">ROC-AUC</p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Confusion Matrix */}
+            <div className="mt-6 pt-6 border-t border-white/20">
+              <h3 className="text-sm font-semibold mb-4">Confusion Matrix ({svmModelMetrics.totalPredictions.toLocaleString()} predictions)</h3>
+              <div className="grid grid-cols-2 gap-3 max-w-md">
+                <div className="p-3 bg-green-500/30 rounded-lg text-center">
+                  <p className="text-lg font-bold">{svmModelMetrics.confusionMatrix.trueNegative.toLocaleString()}</p>
+                  <p className="text-xs text-purple-200">True Negative (54.9%)</p>
+                </div>
+                <div className="p-3 bg-red-500/30 rounded-lg text-center">
+                  <p className="text-lg font-bold">{svmModelMetrics.confusionMatrix.falsePositive.toLocaleString()}</p>
+                  <p className="text-xs text-purple-200">False Positive (2.4%)</p>
+                </div>
+                <div className="p-3 bg-orange-500/30 rounded-lg text-center">
+                  <p className="text-lg font-bold">{svmModelMetrics.confusionMatrix.falseNegative.toLocaleString()}</p>
+                  <p className="text-xs text-purple-200">False Negative (2.9%)</p>
+                </div>
+                <div className="p-3 bg-green-500/30 rounded-lg text-center">
+                  <p className="text-lg font-bold">{svmModelMetrics.confusionMatrix.truePositive.toLocaleString()}</p>
+                  <p className="text-xs text-purple-200">True Positive (39.9%)</p>
+                </div>
+              </div>
             </div>
           </div>
 
