@@ -227,6 +227,7 @@ export const summaryStats = {
   averageAge: 58,
   femalePercentage: 52.0,
   malePercentage: 48.0,
+  marriedPercentage: 47.9,
   unemployedPercentage: 59.6,
   healthyPercentage: 57.0,
   averageIncome: 762.96,
