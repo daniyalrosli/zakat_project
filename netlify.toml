@@ -1,7 +1,7 @@
 [build]
   base = "zakat_dashboard"
   command = "npm run build"
-  publish = "out"
+  publish = "zakat_dashboard/out"
 
 [[redirects]]
   from = "/*"
