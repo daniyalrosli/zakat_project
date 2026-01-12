@@ -132,84 +132,74 @@ export default function Forecast() {
             <div className="mb-6">
               <div className="flex items-center justify-between mb-5">
                 <p className="text-sm font-medium text-white">Escape Rate Trend</p>
-                <div className="flex items-center gap-5 text-[11px]">
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-8 h-1 rounded-full bg-gradient-to-r from-pink-500 to-purple-500"></span>
+                <div className="flex items-center gap-6 text-[11px]">
+                  <span className="flex items-center gap-2">
+                    <span className="w-8 h-[2px] bg-blue-500 rounded-full"></span>
                     <span className="text-gray-400">Actual</span>
                   </span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-8 h-1 rounded-full bg-gradient-to-r from-cyan-400 to-emerald-400 opacity-60"></span>
+                  <span className="flex items-center gap-2">
+                    <span className="w-8 h-[2px] rounded-full" style={{ backgroundImage: 'repeating-linear-gradient(90deg, #f97316 0px, #f97316 4px, transparent 4px, transparent 8px)' }}></span>
                     <span className="text-gray-400">Forecast</span>
                   </span>
                 </div>
               </div>
               
               {/* Chart */}
-              <div className="relative h-52 bg-[#12082a] rounded-2xl border border-purple-500/10 overflow-hidden">
-                {/* Background glow */}
-                <div className="absolute inset-0 bg-gradient-to-t from-purple-600/5 to-transparent"></div>
+              <div className="relative h-64 bg-white rounded-xl border border-gray-200 overflow-hidden">
+                {/* Y-axis label */}
+                <div className="absolute -left-1 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] text-gray-500 whitespace-nowrap">
+                  Escape Rate (%)
+                </div>
                 
-                {/* Y-axis */}
-                <div className="absolute left-3 top-4 bottom-10 flex flex-col justify-between text-[10px] text-gray-500">
+                {/* Y-axis values */}
+                <div className="absolute left-8 top-6 bottom-10 flex flex-col justify-between text-[10px] text-gray-500">
                   <span>30%</span>
+                  <span>25%</span>
                   <span>20%</span>
+                  <span>15%</span>
                   <span>10%</span>
+                  <span>5%</span>
                   <span>0%</span>
                 </div>
                 
                 {/* Chart area */}
-                <div className="absolute left-10 right-4 top-4 bottom-10">
-                  {/* Grid */}
+                <div className="absolute left-14 right-6 top-6 bottom-10">
+                  {/* Horizontal grid lines */}
                   <div className="absolute inset-0">
-                    {[0, 1, 2, 3].map(i => (
-                      <div key={i} className="absolute w-full border-t border-white/5" style={{ top: `${i * 33.33}%` }}></div>
-                    ))}
-                    {[0, 1, 2, 3, 4, 5].map(i => (
-                      <div key={i} className="absolute h-full border-l border-white/5" style={{ left: `${i * 20}%` }}></div>
+                    {[0, 1, 2, 3, 4, 5, 6].map(i => (
+                      <div key={i} className="absolute w-full border-t border-gray-200" style={{ top: `${i * 16.67}%` }}></div>
                     ))}
                   </div>
                   
-                  {/* SVG */}
+                  {/* SVG Chart */}
                   <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                    <defs>
-                      <linearGradient id="chartLine" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#f472b6" />
-                        <stop offset="35%" stopColor="#a855f7" />
-                        <stop offset="50%" stopColor="#8b5cf6" />
-                        <stop offset="65%" stopColor="#22d3ee" />
-                        <stop offset="100%" stopColor="#34d399" />
-                      </linearGradient>
-                      <linearGradient id="chartArea" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" stopColor="#a855f7" stopOpacity="0.3" />
-                        <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.1" />
-                        <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
-                      </linearGradient>
-                    </defs>
-                    
-                    {/* Area fill */}
-                    <path
-                      d={`M 0 ${100 - (multiYearForecast.escapeRate2022 / 30) * 100}
-                          L 20 ${100 - (multiYearForecast.escapeRate2023 / 30) * 100}
-                          L 40 ${100 - (multiYearForecast.escapeRate2024 / 30) * 100}
-                          L 60 ${100 - (multiYearForecast.projectedEscapeRate2025 / 30) * 100}
-                          L 80 ${100 - (multiYearForecast.projectedEscapeRate2026 / 30) * 100}
-                          L 100 ${100 - (multiYearForecast.projectedEscapeRate2027 / 30) * 100}
-                          L 100 100 L 0 100 Z`}
-                      fill="url(#chartArea)"
-                    />
-                    
-                    {/* Main line */}
+                    {/* Actual data line (solid blue) - 2022, 2023, 2024 */}
                     <polyline
                       fill="none"
-                      stroke="url(#chartLine)"
+                      stroke="#3b82f6"
                       strokeWidth="0.8"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       vectorEffect="non-scaling-stroke"
-                      style={{ strokeWidth: '3px' }}
+                      style={{ strokeWidth: '2.5px' }}
                       points={`
                         0,${100 - (multiYearForecast.escapeRate2022 / 30) * 100}
                         20,${100 - (multiYearForecast.escapeRate2023 / 30) * 100}
+                        40,${100 - (multiYearForecast.escapeRate2024 / 30) * 100}
+                      `}
+                    />
+                    
+                    {/* Forecast line (dashed orange) - 2024, 2025, 2026, 2027 */}
+                    <polyline
+                      fill="none"
+                      stroke="#f97316"
+                      strokeWidth="0.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeDasharray="3,3"
+                      vectorEffect="non-scaling-stroke"
+                      style={{ strokeWidth: '2.5px' }}
+                      points={`
                         40,${100 - (multiYearForecast.escapeRate2024 / 30) * 100}
                         60,${100 - (multiYearForecast.projectedEscapeRate2025 / 30) * 100}
                         80,${100 - (multiYearForecast.projectedEscapeRate2026 / 30) * 100}
@@ -218,42 +208,65 @@ export default function Forecast() {
                     />
                   </svg>
                   
-                  {/* Data points */}
+                  {/* Data points - Actual (blue) */}
                   {[
-                    { x: 0, rate: multiYearForecast.escapeRate2022, color: '#f472b6', glow: 'shadow-pink-500/50' },
-                    { x: 20, rate: multiYearForecast.escapeRate2023, color: '#c084fc', glow: 'shadow-purple-500/50' },
-                    { x: 40, rate: multiYearForecast.escapeRate2024, color: '#a78bfa', glow: 'shadow-violet-500/50' },
-                    { x: 60, rate: multiYearForecast.projectedEscapeRate2025, color: '#22d3ee', glow: 'shadow-cyan-500/50', forecast: true },
-                    { x: 80, rate: multiYearForecast.projectedEscapeRate2026, color: '#2dd4bf', glow: 'shadow-teal-500/50', forecast: true },
-                    { x: 100, rate: multiYearForecast.projectedEscapeRate2027, color: '#34d399', glow: 'shadow-emerald-500/50', forecast: true },
+                    { x: 0, rate: multiYearForecast.escapeRate2022 },
+                    { x: 20, rate: multiYearForecast.escapeRate2023 },
+                    { x: 40, rate: multiYearForecast.escapeRate2024 },
                   ].map((point, i) => (
                     <div
                       key={i}
-                      className="absolute flex flex-col items-center"
+                      className="absolute group"
                       style={{
                         left: `${point.x}%`,
                         bottom: `${(point.rate / 30) * 100}%`,
                         transform: 'translate(-50%, 50%)'
                       }}
                     >
-                      {/* Tooltip */}
-                      <div className={`absolute -top-8 px-2 py-1 rounded-md text-[11px] font-bold whitespace-nowrap ${point.forecast ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30' : 'bg-purple-500/20 text-white border border-purple-500/30'}`}>
+                      {/* Tooltip on hover */}
+                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded bg-gray-800 text-white text-[10px] font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
                         {point.rate}%
                       </div>
                       {/* Dot */}
-                      <div
-                        className={`w-3 h-3 rounded-full shadow-lg ${point.glow} ${point.forecast ? 'ring-2 ring-cyan-400/20' : 'ring-2 ring-purple-400/20'}`}
-                        style={{ backgroundColor: point.color }}
-                      ></div>
+                      <div className="w-2.5 h-2.5 rounded-full bg-blue-500 border-2 border-white shadow-sm"></div>
+                    </div>
+                  ))}
+                  
+                  {/* Data points - Forecast (orange, square dots) */}
+                  {[
+                    { x: 60, rate: multiYearForecast.projectedEscapeRate2025 },
+                    { x: 80, rate: multiYearForecast.projectedEscapeRate2026 },
+                    { x: 100, rate: multiYearForecast.projectedEscapeRate2027 },
+                  ].map((point, i) => (
+                    <div
+                      key={i}
+                      className="absolute group"
+                      style={{
+                        left: `${point.x}%`,
+                        bottom: `${(point.rate / 30) * 100}%`,
+                        transform: 'translate(-50%, 50%)'
+                      }}
+                    >
+                      {/* Tooltip on hover */}
+                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded bg-gray-800 text-white text-[10px] font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                        {point.rate}% (projected)
+                      </div>
+                      {/* Square dot for forecast */}
+                      <div className="w-2 h-2 rotate-45 bg-orange-500 border-2 border-white shadow-sm"></div>
                     </div>
                   ))}
                 </div>
                 
                 {/* X-axis */}
-                <div className="absolute left-10 right-4 bottom-2 flex justify-between">
+                <div className="absolute left-14 right-6 bottom-2 flex justify-between">
                   {['2022', '2023', '2024', '2025', '2026', '2027'].map((year, i) => (
-                    <span key={i} className={`text-[10px] ${i >= 3 ? 'text-cyan-400/70' : 'text-gray-500'}`}>{year}</span>
+                    <span key={i} className="text-[10px] text-gray-500">{year}</span>
                   ))}
+                </div>
+                
+                {/* X-axis label */}
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-[10px] text-gray-500">
+                  Year
                 </div>
               </div>
               
