@@ -476,7 +476,7 @@ export default function Forecast() {
                   </div>
                   <h3 className="text-sm font-semibold text-white mb-2">Run a Prediction</h3>
                   <p className="text-xs text-gray-500 text-center max-w-xs">
-                    Enter recipient information and click "Predict" to see the poverty escape probability.
+                    Enter recipient information and click &quot;Predict&quot; to see the poverty escape probability.
                   </p>
                 </div>
               )}

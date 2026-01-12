@@ -1,201 +1,254 @@
 import Navbar from '@/components/navbar';
 
 export default function About() {
+  const models = [
+    { name: 'SVM (RBF)', accuracy: 94.73, precision: 94.80, recall: 94.73, f1: 94.70, roc: 98.96, selected: true, color: 'pink' },
+    { name: 'Gradient Boosting', accuracy: 94.12, precision: 94.15, recall: 94.12, f1: 94.10, roc: 98.45, selected: false, color: 'yellow' },
+    { name: 'Random Forest', accuracy: 93.87, precision: 93.90, recall: 93.87, f1: 93.85, roc: 98.21, selected: false, color: 'emerald' },
+    { name: 'Logistic Regression', accuracy: 91.25, precision: 91.30, recall: 91.25, f1: 91.20, roc: 96.42, selected: false, color: 'blue' },
+  ];
+
+  const features = [
+    { icon: '👤', title: 'Demographics', desc: 'Age, gender, marital status, dependents', gradient: 'from-pink-500 to-rose-500' },
+    { icon: '💰', title: 'Financial Status', desc: 'Income, expenses, savings, debts', gradient: 'from-emerald-500 to-teal-500' },
+    { icon: '💼', title: 'Employment', desc: 'Job type, occupation sector, skills', gradient: 'from-blue-500 to-indigo-500' },
+    { icon: '🏥', title: 'Health', desc: 'Health status, disabilities, chronic illness', gradient: 'from-red-500 to-pink-500' },
+    { icon: '🏠', title: 'Assets', desc: 'Property, vehicles, appliances owned', gradient: 'from-purple-500 to-violet-500' },
+    { icon: '📍', title: 'Geographic', desc: 'District, urban/rural location', gradient: 'from-cyan-500 to-blue-500' },
+  ];
+
+  const methodology = [
+    { step: '01', title: 'Data Collection', desc: 'Gathered comprehensive data from LZNK on 51,962 recipients across all 12 districts in Kedah state.', icon: '📊' },
+    { step: '02', title: 'Feature Engineering', desc: 'Processed and engineered 113 features including income ratios, expense patterns, and risk indicators.', icon: '⚙️' },
+    { step: '03', title: 'Model Training', desc: 'Compared multiple ML algorithms: Logistic Regression, Random Forest, SVM, and Gradient Boosting.', icon: '🤖' },
+    { step: '04', title: 'Validation', desc: 'Applied stratified k-fold cross-validation to ensure robust and reliable performance estimates.', icon: '✅' },
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0f0a1e] via-[#1a1035] to-[#0d1a2d]">
       <Navbar />
 
       <main className="pt-16">
-        <div className="max-w-4xl mx-auto px-6 sm:px-8 lg:px-12 py-8">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-12">
           
-          {/* Header */}
-          <div className="text-center mb-10">
-            <h1 className="text-3xl font-bold text-white mb-2">About This Research</h1>
-            <p className="text-gray-400">Machine Learning for Zakat Poverty Escape Prediction</p>
+          {/* Hero Header */}
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 mb-6">
+              <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
+              <span className="text-sm text-purple-300">Research Project</span>
+            </div>
+            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+              About This <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">Research</span>
+            </h1>
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+              Machine Learning-Powered Poverty Escape Prediction for Zakat Recipients in Kedah, Malaysia
+            </p>
+          </div>
+
+          {/* Stats Banner */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+            {[
+              { value: '51,962', label: 'Recipients Analyzed', icon: '👥' },
+              { value: '113', label: 'Features Processed', icon: '📈' },
+              { value: '12', label: 'Districts Covered', icon: '📍' },
+              { value: '3 Years', label: 'Data Collected', icon: '📅' },
+            ].map((stat, i) => (
+              <div key={i} className="group relative bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 hover:border-purple-500/40 transition-all hover:scale-[1.02]">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <span className="text-2xl mb-3 block">{stat.icon}</span>
+                <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
+                <div className="text-xs text-gray-400">{stat.label}</div>
+              </div>
+            ))}
           </div>
 
           {/* Research Overview */}
-          <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20 mb-6">
-            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-500"></span>
-              Research Overview
-            </h2>
-            <p className="text-sm text-gray-300 leading-relaxed mb-4">
-              This project develops a machine learning-based predictive model to assess the probability 
-              of zakat recipients escaping poverty. Using data from <strong className="text-white">51,962 asnaf</strong> (zakat recipients) 
-              in Kedah, Malaysia collected between 2022-2024, we analyze <strong className="text-white">113 socioeconomic features</strong> to 
-              predict escape potential within a 3-year horizon.
-            </p>
-            <p className="text-sm text-gray-300 leading-relaxed">
-              The model helps zakat institutions optimize resource allocation and develop targeted 
-              intervention strategies for different recipient profiles.
-            </p>
+          <div className="relative mb-16">
+            <div className="absolute -inset-1 bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-cyan-500/20 rounded-3xl blur-xl"></div>
+            <div className="relative bg-[#1e1445]/80 backdrop-blur-sm rounded-3xl p-8 md:p-10 border border-purple-500/20">
+              <div className="flex items-start gap-4 mb-6">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-xl shadow-lg shadow-pink-500/30">
+                  📋
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-white">Research Overview</h2>
+                  <p className="text-sm text-gray-400">Understanding the project scope and objectives</p>
+                </div>
+              </div>
+              <div className="space-y-4 text-gray-300 leading-relaxed">
+                <p>
+                  This project develops a <span className="text-white font-semibold">machine learning-based predictive model</span> to assess the probability 
+                  of zakat recipients escaping poverty. Using comprehensive data from <span className="text-pink-400 font-semibold">51,962 asnaf</span> (zakat recipients) 
+                  in Kedah, Malaysia collected between 2022-2024, we analyze <span className="text-cyan-400 font-semibold">113 socioeconomic features</span> to 
+                  predict escape potential within a 3-year horizon.
+                </p>
+                <p>
+                  The model enables zakat institutions to <span className="text-white font-semibold">optimize resource allocation</span> and develop 
+                  <span className="text-purple-400 font-semibold"> targeted intervention strategies</span> tailored to different recipient profiles, 
+                  maximizing the social impact of zakat distribution.
+                </p>
+              </div>
+            </div>
           </div>
 
-          {/* Model Performance Comparison */}
-          <div className="bg-gradient-to-br from-purple-600/30 to-pink-600/20 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/30 mb-6">
-            <h2 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"></span>
-              Model Performance Comparison
-            </h2>
-            
-            {/* All Models Comparison Table */}
-            <div className="overflow-x-auto mb-6">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-purple-500/30">
-                    <th className="text-left py-3 px-2 text-gray-400 font-medium">Model</th>
-                    <th className="text-center py-3 px-2 text-gray-400 font-medium">Accuracy</th>
-                    <th className="text-center py-3 px-2 text-gray-400 font-medium">Precision</th>
-                    <th className="text-center py-3 px-2 text-gray-400 font-medium">Recall</th>
-                    <th className="text-center py-3 px-2 text-gray-400 font-medium">F1-Score</th>
-                    <th className="text-center py-3 px-2 text-gray-400 font-medium">ROC-AUC</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-purple-500/20 bg-gradient-to-r from-pink-500/10 to-purple-500/10">
-                    <td className="py-3 px-2 font-semibold text-white flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-pink-500"></span>
-                      SVM (RBF) ✓
-                    </td>
-                    <td className="text-center py-3 px-2 text-emerald-400 font-bold">94.73%</td>
-                    <td className="text-center py-3 px-2 text-white">94.80%</td>
-                    <td className="text-center py-3 px-2 text-white">94.73%</td>
-                    <td className="text-center py-3 px-2 text-white">94.70%</td>
-                    <td className="text-center py-3 px-2 text-cyan-400 font-bold">98.96%</td>
-                  </tr>
-                  <tr className="border-b border-purple-500/20">
-                    <td className="py-3 px-2 text-gray-300 flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-blue-500"></span>
-                      Logistic Regression
-                    </td>
-                    <td className="text-center py-3 px-2 text-white">91.25%</td>
-                    <td className="text-center py-3 px-2 text-gray-400">91.30%</td>
-                    <td className="text-center py-3 px-2 text-gray-400">91.25%</td>
-                    <td className="text-center py-3 px-2 text-gray-400">91.20%</td>
-                    <td className="text-center py-3 px-2 text-white">96.42%</td>
-                  </tr>
-                  <tr className="border-b border-purple-500/20">
-                    <td className="py-3 px-2 text-gray-300 flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                      Random Forest
-                    </td>
-                    <td className="text-center py-3 px-2 text-white">93.87%</td>
-                    <td className="text-center py-3 px-2 text-gray-400">93.90%</td>
-                    <td className="text-center py-3 px-2 text-gray-400">93.87%</td>
-                    <td className="text-center py-3 px-2 text-gray-400">93.85%</td>
-                    <td className="text-center py-3 px-2 text-white">98.21%</td>
-                  </tr>
-                  <tr className="border-b border-purple-500/20">
-                    <td className="py-3 px-2 text-gray-300 flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-yellow-500"></span>
-                      Gradient Boosting
-                    </td>
-                    <td className="text-center py-3 px-2 text-white">94.12%</td>
-                    <td className="text-center py-3 px-2 text-gray-400">94.15%</td>
-                    <td className="text-center py-3 px-2 text-gray-400">94.12%</td>
-                    <td className="text-center py-3 px-2 text-gray-400">94.10%</td>
-                    <td className="text-center py-3 px-2 text-white">98.45%</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            {/* SVM Highlight */}
-            <div className="grid sm:grid-cols-2 gap-6 mb-6">
-              <div className="text-center p-4 bg-white/5 rounded-xl border border-pink-500/30">
-                <div className="text-3xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent mb-1">94.73%</div>
-                <p className="text-sm text-gray-300">Best Accuracy</p>
+          {/* Model Performance Section */}
+          <div className="mb-16">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-lg shadow-lg shadow-cyan-500/30">
+                🎯
               </div>
-              <div className="text-center p-4 bg-white/5 rounded-xl border border-cyan-500/30">
-                <div className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-1">98.96%</div>
-                <p className="text-sm text-gray-300">Highest ROC-AUC</p>
+              <div>
+                <h2 className="text-xl font-bold text-white">Model Performance</h2>
+                <p className="text-sm text-gray-400">Comparing machine learning algorithms</p>
               </div>
             </div>
 
-            {/* Why SVM */}
-            <div className="p-5 bg-gradient-to-r from-pink-500/10 to-cyan-500/10 rounded-xl border border-purple-500/20">
-              <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
-                <svg className="w-4 h-4 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {/* Model Cards */}
+            <div className="grid md:grid-cols-2 gap-4 mb-8">
+              {models.map((model, i) => (
+                <div 
+                  key={i} 
+                  className={`relative rounded-2xl p-6 border transition-all ${
+                    model.selected 
+                      ? 'bg-gradient-to-br from-pink-500/20 to-purple-500/20 border-pink-500/40 shadow-lg shadow-pink-500/10' 
+                      : 'bg-[#1e1445]/60 border-purple-500/20 hover:border-purple-500/30'
+                  }`}
+                >
+                  {model.selected && (
+                    <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-pink-500/20 border border-pink-500/30">
+                      <span className="text-xs text-pink-300 font-medium">✓ Selected Model</span>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className={`w-3 h-3 rounded-full bg-${model.color}-500`}></div>
+                    <h3 className={`font-semibold ${model.selected ? 'text-white text-lg' : 'text-gray-300'}`}>{model.name}</h3>
+                  </div>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div>
+                      <div className={`text-xl font-bold ${model.selected ? 'text-white' : 'text-gray-300'}`}>{model.accuracy}%</div>
+                      <div className="text-xs text-gray-500">Accuracy</div>
+                    </div>
+                    <div>
+                      <div className={`text-xl font-bold ${model.selected ? 'text-cyan-400' : 'text-gray-400'}`}>{model.roc}%</div>
+                      <div className="text-xs text-gray-500">ROC-AUC</div>
+                    </div>
+                    <div>
+                      <div className={`text-xl font-bold ${model.selected ? 'text-purple-400' : 'text-gray-400'}`}>{model.f1}%</div>
+                      <div className="text-xs text-gray-500">F1-Score</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Why SVM Section */}
+            <div className="bg-gradient-to-r from-[#1e1445] to-[#1a1035] rounded-2xl p-8 border border-purple-500/20">
+              <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                <svg className="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Why SVM was Chosen
+                Why SVM was Selected
               </h3>
-              <ul className="space-y-2 text-xs text-gray-300">
-                <li className="flex items-start gap-2">
-                  <span className="text-pink-400 mt-0.5">•</span>
-                  <span><strong className="text-white">Highest ROC-AUC (98.96%)</strong> — Superior ability to distinguish between recipients who can escape poverty vs. those who cannot, crucial for resource allocation.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-cyan-400 mt-0.5">•</span>
-                  <span><strong className="text-white">Best Overall Accuracy (94.73%)</strong> — Outperforms all other models in correctly classifying recipient outcomes.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-purple-400 mt-0.5">•</span>
-                  <span><strong className="text-white">Handles High-Dimensional Data</strong> — Effectively processes 113 features using RBF kernel to capture complex non-linear relationships.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-emerald-400 mt-0.5">•</span>
-                  <span><strong className="text-white">Robust to Overfitting</strong> — Margin-based optimization provides better generalization on unseen data compared to tree-based models.</span>
-                </li>
-              </ul>
+              <div className="grid md:grid-cols-2 gap-4">
+                {[
+                  { title: 'Highest ROC-AUC (98.96%)', desc: 'Superior ability to distinguish between recipients who can escape poverty vs. those who cannot.', color: 'pink' },
+                  { title: 'Best Accuracy (94.73%)', desc: 'Outperforms all other models in correctly classifying recipient outcomes.', color: 'cyan' },
+                  { title: 'Handles High Dimensions', desc: 'Effectively processes 113 features using RBF kernel for complex non-linear relationships.', color: 'purple' },
+                  { title: 'Robust to Overfitting', desc: 'Margin-based optimization provides better generalization on unseen data.', color: 'emerald' },
+                ].map((item, i) => (
+                  <div key={i} className="flex gap-3 p-4 bg-white/5 rounded-xl border border-purple-500/10">
+                    <div className={`w-2 h-2 rounded-full bg-${item.color}-500 mt-2 flex-shrink-0`}></div>
+                    <div>
+                      <div className="text-sm font-semibold text-white mb-1">{item.title}</div>
+                      <div className="text-xs text-gray-400">{item.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Key Features */}
-          <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20 mb-6">
-            <h2 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500"></span>
-              Key Features Analyzed
-            </h2>
-            <div className="grid sm:grid-cols-2 gap-4">
-              {[
-                { title: 'Demographics', desc: 'Age, gender, marital status, dependents', color: 'from-pink-500 to-purple-500' },
-                { title: 'Financial Status', desc: 'Income, expenses, savings, debts', color: 'from-cyan-500 to-blue-500' },
-                { title: 'Employment', desc: 'Job type, occupation sector, skills', color: 'from-emerald-500 to-teal-500' },
-                { title: 'Health', desc: 'Health status, disabilities, chronic illness', color: 'from-yellow-500 to-orange-500' },
-                { title: 'Assets', desc: 'Property, vehicles, appliances owned', color: 'from-purple-500 to-pink-500' },
-                { title: 'Geographic', desc: 'District, urban/rural location', color: 'from-blue-500 to-cyan-500' },
-              ].map((item, i) => (
-                <div key={i} className="bg-white/5 rounded-xl p-4 border border-purple-500/20 hover:border-purple-400/40 transition-colors">
-                  <div className={`text-sm font-semibold bg-gradient-to-r ${item.color} bg-clip-text text-transparent mb-1`}>{item.title}</div>
-                  <p className="text-xs text-gray-400">{item.desc}</p>
+          {/* Features Analyzed */}
+          <div className="mb-16">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center text-lg shadow-lg shadow-yellow-500/30">
+                🔍
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-white">Key Features Analyzed</h2>
+                <p className="text-sm text-gray-400">113 socioeconomic indicators across 6 categories</p>
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {features.map((feature, i) => (
+                <div key={i} className="group relative bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 hover:border-purple-500/40 transition-all hover:-translate-y-1">
+                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center text-xl mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-white font-semibold mb-2">{feature.title}</h3>
+                  <p className="text-sm text-gray-400">{feature.desc}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Methodology */}
-          <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20 mb-6">
-            <h2 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500"></span>
-              Methodology
-            </h2>
-            <div className="space-y-4">
-              {[
-                { step: '1', title: 'Data Collection', desc: 'Gathered data from LZNK on 51,962 recipients across 12 districts in Kedah.' },
-                { step: '2', title: 'Feature Engineering', desc: 'Processed 113 features including income ratios, expense patterns, and risk indicators.' },
-                { step: '3', title: 'Model Training', desc: 'Compared Logistic Regression, Random Forest, SVM, and Gradient Boosting models.' },
-                { step: '4', title: 'Validation', desc: 'Used stratified k-fold cross-validation to ensure robust performance estimates.' },
-              ].map((item, i) => (
-                <div key={i} className="flex gap-4 items-start">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-lg shadow-purple-500/30">
-                    {item.step}
+          <div className="mb-16">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-lg shadow-lg shadow-emerald-500/30">
+                🔬
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-white">Methodology</h2>
+                <p className="text-sm text-gray-400">Our research process step by step</p>
+              </div>
+            </div>
+
+            <div className="relative">
+              {/* Timeline line */}
+              <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-pink-500 via-purple-500 to-cyan-500 hidden md:block"></div>
+              
+              <div className="space-y-6">
+                {methodology.map((item, i) => (
+                  <div key={i} className="relative flex gap-6 items-start group">
+                    {/* Step number */}
+                    <div className="relative z-10 w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-purple-500/30 group-hover:scale-110 transition-transform flex-shrink-0">
+                      {item.step}
+                    </div>
+                    {/* Content */}
+                    <div className="flex-1 bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 group-hover:border-purple-500/40 transition-colors">
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className="text-xl">{item.icon}</span>
+                        <h3 className="text-white font-semibold">{item.title}</h3>
+                      </div>
+                      <p className="text-sm text-gray-400">{item.desc}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-white">{item.title}</h3>
-                    <p className="text-xs text-gray-400 mt-1">{item.desc}</p>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Data Source */}
-          <div className="bg-gradient-to-r from-pink-500/10 to-cyan-500/10 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 text-center">
-            <p className="text-xs text-gray-400 mb-2">Data Source</p>
-            <p className="text-sm font-semibold text-white">Lembaga Zakat Negeri Kedah (LZNK)</p>
-            <p className="text-xs text-gray-500 mt-1">Zakat recipient records from 2022-2024</p>
+          {/* Data Source Footer */}
+          <div className="relative">
+            <div className="absolute -inset-1 bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-cyan-500/10 rounded-2xl blur-lg"></div>
+            <div className="relative bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20 text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 text-2xl mb-4 shadow-lg shadow-purple-500/30">
+                🏛️
+              </div>
+              <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Data Source</p>
+              <p className="text-xl font-bold text-white mb-1">Lembaga Zakat Negeri Kedah (LZNK)</p>
+              <p className="text-sm text-gray-400">Official zakat recipient records from 2022-2024</p>
+              <div className="flex items-center justify-center gap-4 mt-6">
+                <div className="px-4 py-2 rounded-full bg-white/5 border border-purple-500/20 text-xs text-gray-400">
+                  📍 Kedah, Malaysia
+                </div>
+                <div className="px-4 py-2 rounded-full bg-white/5 border border-purple-500/20 text-xs text-gray-400">
+                  📅 2022-2024
+                </div>
+              </div>
+            </div>
           </div>
 
         </div>
