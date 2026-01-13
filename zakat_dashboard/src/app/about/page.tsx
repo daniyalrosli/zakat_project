@@ -56,8 +56,8 @@ export default function About() {
               <div key={i} className="group relative bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 hover:border-purple-500/40 transition-all hover:scale-[1.02]">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <span className="text-2xl mb-3 block">{stat.icon}</span>
-                <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
-                <div className="text-xs text-gray-400">{stat.label}</div>
+                <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
+                <div className="text-sm text-gray-400">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -72,10 +72,10 @@ export default function About() {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-white">Research Overview</h2>
-                  <p className="text-sm text-gray-400">Understanding the project scope and objectives</p>
+                  <p className="text-base text-gray-400">Understanding the project scope and objectives</p>
                 </div>
               </div>
-              <div className="space-y-4 text-gray-300 leading-relaxed">
+              <div className="space-y-4 text-gray-300 leading-relaxed text-base">
                 <p>
                   This project develops a <span className="text-white font-semibold">machine learning-based predictive model</span> to assess the probability 
                   of zakat recipients escaping poverty. Using comprehensive data from <span className="text-pink-400 font-semibold">51,962 asnaf</span> (zakat recipients) 
@@ -99,7 +99,7 @@ export default function About() {
               </div>
               <div>
                 <h2 className="text-xl font-bold text-white">Model Performance</h2>
-                <p className="text-sm text-gray-400">Comparing machine learning algorithms</p>
+                <p className="text-base text-gray-400">Comparing machine learning algorithms</p>
               </div>
             </div>
 
@@ -159,8 +159,8 @@ export default function About() {
                   <div key={i} className="flex gap-3 p-4 bg-white/5 rounded-xl border border-purple-500/10">
                     <div className={`w-2 h-2 rounded-full bg-${item.color}-500 mt-2 flex-shrink-0`}></div>
                     <div>
-                      <div className="text-sm font-semibold text-white mb-1">{item.title}</div>
-                      <div className="text-xs text-gray-400">{item.desc}</div>
+                      <div className="text-base font-semibold text-white mb-1">{item.title}</div>
+                      <div className="text-sm text-gray-400">{item.desc}</div>
                     </div>
                   </div>
                 ))}
@@ -176,7 +176,7 @@ export default function About() {
               </div>
               <div>
                 <h2 className="text-xl font-bold text-white">Key Features Analyzed</h2>
-                <p className="text-sm text-gray-400">113 socioeconomic indicators across 6 categories</p>
+                <p className="text-base text-gray-400">113 socioeconomic indicators across 6 categories</p>
               </div>
             </div>
 
@@ -186,7 +186,7 @@ export default function About() {
                   <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center text-xl mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
                     {feature.icon}
                   </div>
-                  <h3 className="text-white font-semibold mb-2">{feature.title}</h3>
+                  <h3 className="text-white font-semibold text-base mb-2">{feature.title}</h3>
                   <p className="text-sm text-gray-400">{feature.desc}</p>
                 </div>
               ))}
@@ -201,7 +201,7 @@ export default function About() {
               </div>
               <div>
                 <h2 className="text-xl font-bold text-white">Methodology</h2>
-                <p className="text-sm text-gray-400">Our research process step by step</p>
+                <p className="text-base text-gray-400">Our research process step by step</p>
               </div>
             </div>
 
@@ -220,7 +220,7 @@ export default function About() {
                     <div className="flex-1 bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 group-hover:border-purple-500/40 transition-colors">
                       <div className="flex items-center gap-3 mb-2">
                         <span className="text-xl">{item.icon}</span>
-                        <h3 className="text-white font-semibold">{item.title}</h3>
+                        <h3 className="text-white font-semibold text-base">{item.title}</h3>
                       </div>
                       <p className="text-sm text-gray-400">{item.desc}</p>
                     </div>

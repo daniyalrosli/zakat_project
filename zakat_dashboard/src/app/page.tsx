@@ -97,33 +97,33 @@ export default function Home() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div className="bg-gradient-to-br from-pink-500/20 to-pink-600/10 backdrop-blur-sm rounded-2xl p-5 border border-pink-500/20">
               <div className="flex items-center justify-between mb-2">
-                <p className="text-xs text-pink-300">Accuracy</p>
+                <p className="text-sm text-pink-300">Accuracy</p>
                 <div className="flex gap-0.5">
                   {[1,2,3,4].map(i => <div key={i} className="w-1 h-3 bg-pink-500 rounded-full"></div>)}
                 </div>
               </div>
-              <p className="text-2xl font-bold text-white">94.73%</p>
+              <p className="text-3xl font-bold text-white">94.73%</p>
             </div>
             <div className="bg-gradient-to-br from-cyan-500/20 to-cyan-600/10 backdrop-blur-sm rounded-2xl p-5 border border-cyan-500/20">
               <div className="flex items-center justify-between mb-2">
-                <p className="text-xs text-cyan-300">Recipients</p>
+                <p className="text-sm text-cyan-300">Recipients</p>
                 <span className="text-cyan-400">👥</span>
               </div>
-              <p className="text-2xl font-bold text-white">51,962</p>
+              <p className="text-3xl font-bold text-white">51,962</p>
             </div>
             <div className="bg-gradient-to-br from-purple-500/20 to-purple-600/10 backdrop-blur-sm rounded-2xl p-5 border border-purple-500/20">
               <div className="flex items-center justify-between mb-2">
-                <p className="text-xs text-purple-300">Districts</p>
+                <p className="text-sm text-purple-300">Districts</p>
                 <span className="text-purple-400">📍</span>
               </div>
-              <p className="text-2xl font-bold text-white">12</p>
+              <p className="text-3xl font-bold text-white">12</p>
             </div>
             <div className="bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 backdrop-blur-sm rounded-2xl p-5 border border-yellow-500/20">
               <div className="flex items-center justify-between mb-2">
-                <p className="text-xs text-yellow-300">ROC-AUC</p>
+                <p className="text-sm text-yellow-300">ROC-AUC</p>
                 <span className="text-yellow-400">📊</span>
               </div>
-              <p className="text-2xl font-bold text-white">98.96%</p>
+              <p className="text-3xl font-bold text-white">98.96%</p>
             </div>
           </div>
 

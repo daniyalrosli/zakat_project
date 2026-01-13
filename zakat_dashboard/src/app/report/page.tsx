@@ -25,41 +25,41 @@ export default function Report() {
           
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-white">Zakat Recipients Report</h1>
-            <p className="text-sm text-gray-400 mt-1">Comprehensive analysis of {totalRecipients.toLocaleString()} asnaf in Kedah (2022-2024)</p>
+            <h1 className="text-3xl font-bold text-white">Zakat Recipients Report</h1>
+            <p className="text-base text-gray-400 mt-2">Comprehensive analysis of {totalRecipients.toLocaleString()} asnaf in Kedah (2022-2024)</p>
           </div>
 
           {/* Summary Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div className="bg-gradient-to-br from-purple-500/20 to-purple-600/10 backdrop-blur-sm rounded-2xl p-5 border border-purple-500/20">
-              <p className="text-xs text-purple-300 mb-1">Total Recipients</p>
-              <p className="text-2xl font-bold text-white">{totalRecipients.toLocaleString()}</p>
+              <p className="text-sm text-purple-300 mb-1">Total Recipients</p>
+              <p className="text-3xl font-bold text-white">{totalRecipients.toLocaleString()}</p>
             </div>
             <div className="bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 backdrop-blur-sm rounded-2xl p-5 border border-emerald-500/20">
-              <p className="text-xs text-emerald-300 mb-1">Average Income</p>
-              <p className="text-2xl font-bold text-emerald-400">RM {summaryStats.averageIncome.toFixed(0)}</p>
+              <p className="text-sm text-emerald-300 mb-1">Average Income</p>
+              <p className="text-3xl font-bold text-emerald-400">RM {summaryStats.averageIncome.toFixed(0)}</p>
             </div>
             <div className="bg-gradient-to-br from-red-500/20 to-red-600/10 backdrop-blur-sm rounded-2xl p-5 border border-red-500/20">
-              <p className="text-xs text-red-300 mb-1">Average Expenses</p>
-              <p className="text-2xl font-bold text-red-400">RM {summaryStats.averageExpenses.toFixed(0)}</p>
+              <p className="text-sm text-red-300 mb-1">Average Expenses</p>
+              <p className="text-3xl font-bold text-red-400">RM {summaryStats.averageExpenses.toFixed(0)}</p>
             </div>
             <div className="bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 backdrop-blur-sm rounded-2xl p-5 border border-yellow-500/20">
-              <p className="text-xs text-yellow-300 mb-1">Income Gap</p>
-              <p className="text-2xl font-bold text-yellow-400">-RM {incomeGap.toFixed(0)}</p>
+              <p className="text-sm text-yellow-300 mb-1">Income Gap</p>
+              <p className="text-3xl font-bold text-yellow-400">-RM {incomeGap.toFixed(0)}</p>
             </div>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-6 mb-8">
             {/* Health Status */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-              <h3 className="text-sm font-semibold text-white mb-1">Health Status</h3>
-              <p className="text-xs text-gray-400 mb-6">Recipients by health condition</p>
+              <h3 className="text-base font-semibold text-white mb-1">Health Status</h3>
+              <p className="text-sm text-gray-400 mb-6">Recipients by health condition</p>
               <div className="space-y-3">
                 {healthStatusDistribution.map((item, i) => (
                   <div key={i}>
                     <div className="flex justify-between mb-1">
-                      <span className="text-xs font-medium text-gray-300">{item.label}</span>
-                      <span className="text-xs text-gray-400">{item.count.toLocaleString()} ({item.percentage}%)</span>
+                      <span className="text-sm font-medium text-gray-300">{item.label}</span>
+                      <span className="text-sm text-gray-400">{item.count.toLocaleString()} ({item.percentage}%)</span>
                     </div>
                     <div className="w-full bg-purple-900/30 rounded-full h-2">
                       <div 
@@ -74,16 +74,16 @@ export default function Report() {
 
             {/* Marital Status */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-              <h3 className="text-sm font-semibold text-white mb-1">Marital Status</h3>
-              <p className="text-xs text-gray-400 mb-6">Distribution by family status</p>
+              <h3 className="text-base font-semibold text-white mb-1">Marital Status</h3>
+              <p className="text-sm text-gray-400 mb-6">Distribution by family status</p>
               <div className="space-y-3">
                 {maritalStatusDistribution.slice(0, 5).map((item, i) => {
                   const percentage = (item.count / totalRecipients) * 100;
                   return (
                     <div key={i}>
                       <div className="flex justify-between mb-1">
-                        <span className="text-xs font-medium text-gray-300">{item.label}</span>
-                        <span className="text-xs text-gray-400">{item.count.toLocaleString()} ({percentage.toFixed(1)}%)</span>
+                        <span className="text-sm font-medium text-gray-300">{item.label}</span>
+                        <span className="text-sm text-gray-400">{item.count.toLocaleString()} ({percentage.toFixed(1)}%)</span>
                       </div>
                       <div className="w-full bg-purple-900/30 rounded-full h-2">
                         <div 
@@ -101,15 +101,15 @@ export default function Report() {
           <div className="grid lg:grid-cols-3 gap-6 mb-8">
             {/* Employment Status */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-              <h3 className="text-sm font-semibold text-white mb-4">Employment Status</h3>
+              <h3 className="text-base font-semibold text-white mb-4">Employment Status</h3>
               <div className="space-y-3">
                 {jobTypeDistribution.map((job, i) => (
                   <div key={i} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className={`w-2 h-2 rounded-full ${i === 0 ? 'bg-red-400' : i === 1 ? 'bg-emerald-500' : 'bg-cyan-500'}`}></div>
-                      <span className="text-xs text-gray-300">{job.label}</span>
+                      <span className="text-sm text-gray-300">{job.label}</span>
                     </div>
-                    <span className="text-xs font-semibold text-white">{job.percentage}%</span>
+                    <span className="text-sm font-semibold text-white">{job.percentage}%</span>
                   </div>
                 ))}
               </div>
@@ -117,13 +117,13 @@ export default function Report() {
 
             {/* Expense Breakdown */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-              <h3 className="text-sm font-semibold text-white mb-4">Monthly Expenses</h3>
+              <h3 className="text-base font-semibold text-white mb-4">Monthly Expenses</h3>
               <div className="space-y-3">
                 {expenseCategories.map((exp, i) => (
                   <div key={i}>
                     <div className="flex justify-between mb-1">
-                      <span className="text-xs text-gray-300">{exp.label}</span>
-                      <span className="text-xs font-semibold text-white">RM {exp.average}</span>
+                      <span className="text-sm text-gray-300">{exp.label}</span>
+                      <span className="text-sm font-semibold text-white">RM {exp.average}</span>
                     </div>
                     <div className="w-full bg-purple-900/30 rounded-full h-2">
                       <div 
@@ -138,13 +138,13 @@ export default function Report() {
 
             {/* Housing */}
             <div className="bg-gradient-to-br from-purple-600/30 to-pink-600/20 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/30">
-              <h3 className="text-sm font-semibold text-white mb-4">Housing Type</h3>
+              <h3 className="text-base font-semibold text-white mb-4">Housing Type</h3>
               <div className="space-y-4">
                 {houseTypeDistribution.map((house, i) => (
                   <div key={i}>
                     <div className="flex justify-between mb-2">
-                      <span className="text-xs text-gray-300">{house.label}</span>
-                      <span className="text-sm font-bold text-white">{house.percentage}%</span>
+                      <span className="text-sm text-gray-300">{house.label}</span>
+                      <span className="text-base font-bold text-white">{house.percentage}%</span>
                     </div>
                     <div className="w-full bg-white/10 rounded-full h-2">
                       <div 
@@ -156,7 +156,7 @@ export default function Report() {
                 ))}
               </div>
               <div className="mt-6 pt-4 border-t border-white/10">
-                <p className="text-[10px] text-gray-400">Based on house structure type (Batu/Kayu)</p>
+                <p className="text-xs text-gray-400">Based on house structure type (Batu/Kayu)</p>
               </div>
             </div>
           </div>
@@ -164,14 +164,14 @@ export default function Report() {
           <div className="grid lg:grid-cols-2 gap-6 mb-8">
             {/* Yearly Recipients */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-              <h3 className="text-sm font-semibold text-white mb-1">Recipients by Year</h3>
-              <p className="text-xs text-gray-400 mb-6">Annual distribution (2022-2024)</p>
+              <h3 className="text-base font-semibold text-white mb-1">Recipients by Year</h3>
+              <p className="text-sm text-gray-400 mb-6">Annual distribution (2022-2024)</p>
               <div className="space-y-4">
                 {yearlyBreakdown.map((year, i) => (
                   <div key={i}>
                     <div className="flex justify-between mb-2">
-                      <span className="text-sm font-semibold text-white">{year.year}</span>
-                      <span className="text-sm font-bold text-cyan-400">{year.recipients.toLocaleString()}</span>
+                      <span className="text-base font-semibold text-white">{year.year}</span>
+                      <span className="text-base font-bold text-cyan-400">{year.recipients.toLocaleString()}</span>
                     </div>
                     <div className="w-full bg-purple-900/30 rounded-full h-3">
                       <div 
@@ -182,7 +182,7 @@ export default function Report() {
                   </div>
                 ))}
               </div>
-              <div className="mt-4 pt-4 border-t border-purple-500/20 flex justify-between text-xs text-gray-400">
+              <div className="mt-4 pt-4 border-t border-purple-500/20 flex justify-between text-sm text-gray-400">
                 <span>Total: {totalRecipients.toLocaleString()}</span>
                 <span>Avg/Year: {Math.round(totalRecipients / 3).toLocaleString()}</span>
               </div>
@@ -190,14 +190,14 @@ export default function Report() {
 
             {/* Asset Ownership */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-              <h3 className="text-sm font-semibold text-white mb-1">Asset Ownership</h3>
-              <p className="text-xs text-gray-400 mb-6">Household items owned by recipients</p>
+              <h3 className="text-base font-semibold text-white mb-1">Asset Ownership</h3>
+              <p className="text-sm text-gray-400 mb-6">Household items owned by recipients</p>
               <div className="grid grid-cols-2 gap-3">
                 {assetOwnership.slice(0, 8).map((asset, i) => (
                   <div key={i} className="bg-white/5 rounded-xl p-3 border border-purple-500/20">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-300">{asset.label || asset.asset}</span>
-                      <span className="text-xs font-bold text-white">{asset.percentage}%</span>
+                      <span className="text-sm text-gray-300">{asset.label || asset.asset}</span>
+                      <span className="text-sm font-bold text-white">{asset.percentage}%</span>
                     </div>
                   </div>
                 ))}
@@ -207,19 +207,19 @@ export default function Report() {
 
           {/* Key Insights */}
           <div className="bg-gradient-to-r from-pink-500/10 to-cyan-500/10 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-            <h3 className="text-sm font-semibold text-white mb-3">Key Findings</h3>
+            <h3 className="text-base font-semibold text-white mb-4">Key Findings</h3>
             <div className="grid sm:grid-cols-3 gap-4">
               <div className="flex items-start gap-3">
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-lg shadow-pink-500/30">1</div>
-                <p className="text-xs text-gray-300">59.6% of recipients are unemployed, indicating a critical need for job placement and skills training programs.</p>
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 text-white flex items-center justify-center text-sm flex-shrink-0 shadow-lg shadow-pink-500/30">1</div>
+                <p className="text-sm text-gray-300">59.6% of recipients are unemployed, indicating a critical need for job placement and skills training programs.</p>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-lg shadow-cyan-500/30">2</div>
-                <p className="text-xs text-gray-300">Average expenses exceed income by RM {incomeGap.toFixed(0)}/month, highlighting the financial vulnerability of recipients.</p>
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 text-white flex items-center justify-center text-sm flex-shrink-0 shadow-lg shadow-cyan-500/30">2</div>
+                <p className="text-sm text-gray-300">Average expenses exceed income by RM {incomeGap.toFixed(0)}/month, highlighting the financial vulnerability of recipients.</p>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500 text-white flex items-center justify-center text-xs flex-shrink-0 shadow-lg shadow-yellow-500/30">3</div>
-                <p className="text-xs text-gray-300">43% of recipients have health issues (sick, disabled, or both), requiring integrated healthcare support.</p>
+                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500 text-white flex items-center justify-center text-sm flex-shrink-0 shadow-lg shadow-yellow-500/30">3</div>
+                <p className="text-sm text-gray-300">43% of recipients have health issues (sick, disabled, or both), requiring integrated healthcare support.</p>
               </div>
             </div>
           </div>

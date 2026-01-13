@@ -55,8 +55,8 @@ export default function Overview() {
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
             <div>
-              <h1 className="text-2xl font-bold text-white">Dashboard Overview</h1>
-              <p className="text-sm text-gray-400 mt-1">{summaryStats.totalRecipients.toLocaleString()} recipients across {summaryStats.totalDistricts} districts</p>
+              <h1 className="text-3xl font-bold text-white">Dashboard Overview</h1>
+              <p className="text-base text-gray-400 mt-2">{summaryStats.totalRecipients.toLocaleString()} recipients across {summaryStats.totalDistricts} districts</p>
             </div>
             <select 
               value={selectedYear}
@@ -72,20 +72,20 @@ export default function Overview() {
           {/* Stats Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div className="bg-gradient-to-br from-pink-500/20 to-pink-600/10 backdrop-blur-sm rounded-2xl p-5 border border-pink-500/20">
-              <p className="text-xs text-pink-300 mb-1">Recipients ({selectedYear})</p>
-              <p className="text-2xl font-bold text-white">{yearData.recipients.toLocaleString()}</p>
+              <p className="text-sm text-pink-300 mb-1">Recipients ({selectedYear})</p>
+              <p className="text-3xl font-bold text-white">{yearData.recipients.toLocaleString()}</p>
             </div>
             <div className="bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 backdrop-blur-sm rounded-2xl p-5 border border-emerald-500/20">
-              <p className="text-xs text-emerald-300 mb-1">Avg. Income</p>
-              <p className="text-2xl font-bold text-emerald-400">RM {summaryStats.averageIncome.toFixed(0)}</p>
+              <p className="text-sm text-emerald-300 mb-1">Avg. Income</p>
+              <p className="text-3xl font-bold text-emerald-400">RM {summaryStats.averageIncome.toFixed(0)}</p>
             </div>
             <div className="bg-gradient-to-br from-red-500/20 to-red-600/10 backdrop-blur-sm rounded-2xl p-5 border border-red-500/20">
-              <p className="text-xs text-red-300 mb-1">Avg. Expenses</p>
-              <p className="text-2xl font-bold text-red-400">RM {summaryStats.averageExpenses.toFixed(0)}</p>
+              <p className="text-sm text-red-300 mb-1">Avg. Expenses</p>
+              <p className="text-3xl font-bold text-red-400">RM {summaryStats.averageExpenses.toFixed(0)}</p>
             </div>
             <div className="bg-gradient-to-br from-purple-500/20 to-purple-600/10 backdrop-blur-sm rounded-2xl p-5 border border-purple-500/20">
-              <p className="text-xs text-purple-300 mb-1">Unemployed Rate</p>
-              <p className="text-2xl font-bold text-white">{summaryStats.unemployedPercentage}%</p>
+              <p className="text-sm text-purple-300 mb-1">Unemployed Rate</p>
+              <p className="text-3xl font-bold text-white">{summaryStats.unemployedPercentage}%</p>
             </div>
           </div>
 
@@ -93,10 +93,10 @@ export default function Overview() {
             {/* Monthly Chart */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
               <div className="flex items-center justify-between mb-1">
-                <h3 className="text-sm font-semibold text-white">Monthly Recipients ({selectedYear})</h3>
-                <span className="text-xs font-bold text-cyan-400">{monthlyData.reduce((sum, d) => sum + d.count, 0).toLocaleString()} total</span>
+                <h3 className="text-base font-semibold text-white">Monthly Recipients ({selectedYear})</h3>
+                <span className="text-sm font-bold text-cyan-400">{monthlyData.reduce((sum, d) => sum + d.count, 0).toLocaleString()} total</span>
               </div>
-              <p className="text-xs text-gray-400 mb-6">Hover over bars to see details</p>
+              <p className="text-sm text-gray-400 mb-6">Hover over bars to see details</p>
               <div className="flex items-end justify-between gap-2" style={{ height: '160px' }}>
                 {monthlyData.map((data, index) => {
                   const barHeight = (data.count / maxMonthlyCount) * 100;
@@ -121,10 +121,10 @@ export default function Overview() {
             {/* Interactive District Map */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
               <div className="flex items-center justify-between mb-1">
-                <h3 className="text-sm font-semibold text-white">Kedah District Map</h3>
-                <span className="text-xs text-gray-400">Click on a district</span>
+                <h3 className="text-base font-semibold text-white">Kedah District Map</h3>
+                <span className="text-sm text-gray-400">Click on a district</span>
               </div>
-              <p className="text-xs text-gray-400 mb-4">Interactive map showing recipient distribution</p>
+              <p className="text-sm text-gray-400 mb-4">Interactive map showing recipient distribution</p>
               
               <div className="flex gap-4">
                 {/* Real Map */}
@@ -219,14 +219,14 @@ export default function Overview() {
           <div className="grid lg:grid-cols-2 gap-6 mb-8">
             {/* Top Districts List */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-              <h3 className="text-sm font-semibold text-white mb-1">Top Districts</h3>
-              <p className="text-xs text-gray-400 mb-6">Recipients by location</p>
+              <h3 className="text-base font-semibold text-white mb-1">Top Districts</h3>
+              <p className="text-sm text-gray-400 mb-6">Recipients by location</p>
               <div className="space-y-3">
                 {topDistricts.map((item, index) => (
                   <div key={index}>
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-medium text-gray-300">{item.name}</span>
-                      <span className="text-xs font-semibold text-white">{item.count.toLocaleString()}</span>
+                      <span className="text-sm font-medium text-gray-300">{item.name}</span>
+                      <span className="text-sm font-semibold text-white">{item.count.toLocaleString()}</span>
                     </div>
                     <div className="w-full bg-purple-900/30 rounded-full h-2">
                       <div 
@@ -240,7 +240,7 @@ export default function Overview() {
             </div>
             {/* Gender */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-              <h3 className="text-sm font-semibold text-white mb-4">Gender Distribution</h3>
+              <h3 className="text-base font-semibold text-white mb-4">Gender Distribution</h3>
               <div className="flex items-center justify-center">
                 <div className="relative w-32 h-32">
                   <svg className="w-full h-full transform -rotate-90">
@@ -265,24 +265,24 @@ export default function Overview() {
               <div className="flex justify-center gap-6 mt-4">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-pink-500 rounded-full"></div>
-                  <span className="text-xs text-gray-400">Female {summaryStats.femalePercentage}%</span>
+                  <span className="text-sm text-gray-400">Female {summaryStats.femalePercentage}%</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-purple-900/50 rounded-full"></div>
-                  <span className="text-xs text-gray-400">Male {100 - summaryStats.femalePercentage}%</span>
+                  <span className="text-sm text-gray-400">Male {100 - summaryStats.femalePercentage}%</span>
                 </div>
               </div>
             </div>
 
             {/* Employment */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-              <h3 className="text-sm font-semibold text-white mb-4">Employment Status</h3>
+              <h3 className="text-base font-semibold text-white mb-4">Employment Status</h3>
               <div className="space-y-3">
                 {jobTypeDistribution.slice(0, 4).map((job, i) => (
                   <div key={i}>
                     <div className="flex justify-between mb-1">
-                      <span className="text-xs text-gray-400">{job.type}</span>
-                      <span className="text-xs font-semibold text-white">{job.percentage}%</span>
+                      <span className="text-sm text-gray-400">{job.type}</span>
+                      <span className="text-sm font-semibold text-white">{job.percentage}%</span>
                     </div>
                     <div className="w-full bg-purple-900/30 rounded-full h-2">
                       <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full" style={{ width: `${job.percentage}%` }}></div>
@@ -294,23 +294,23 @@ export default function Overview() {
 
             {/* Quick Stats */}
             <div className="bg-gradient-to-br from-purple-600/30 to-pink-600/20 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/30">
-              <h3 className="text-sm font-semibold text-white mb-4">Key Insights</h3>
+              <h3 className="text-base font-semibold text-white mb-4">Key Insights</h3>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-gray-300">Healthy Recipients</span>
-                  <span className="text-sm font-bold text-emerald-400">{summaryStats.healthyPercentage}%</span>
+                  <span className="text-sm text-gray-300">Healthy Recipients</span>
+                  <span className="text-base font-bold text-emerald-400">{summaryStats.healthyPercentage}%</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-gray-300">Married</span>
-                  <span className="text-sm font-bold text-pink-400">{summaryStats.marriedPercentage}%</span>
+                  <span className="text-sm text-gray-300">Married</span>
+                  <span className="text-base font-bold text-pink-400">{summaryStats.marriedPercentage}%</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-gray-300">Average Age</span>
-                  <span className="text-sm font-bold text-cyan-400">{summaryStats.averageAge} years</span>
+                  <span className="text-sm text-gray-300">Average Age</span>
+                  <span className="text-base font-bold text-cyan-400">{summaryStats.averageAge} years</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-gray-300">Income Gap</span>
-                  <span className="text-sm font-bold text-red-400">-RM {(summaryStats.averageExpenses - summaryStats.averageIncome).toFixed(0)}</span>
+                  <span className="text-sm text-gray-300">Income Gap</span>
+                  <span className="text-base font-bold text-red-400">-RM {(summaryStats.averageExpenses - summaryStats.averageIncome).toFixed(0)}</span>
                 </div>
               </div>
             </div>
