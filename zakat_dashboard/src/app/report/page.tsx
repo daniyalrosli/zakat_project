@@ -11,8 +11,10 @@ import {
   assetOwnership,
   houseTypeDistribution
 } from '@/data/zakatData';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function Report() {
+  const { t } = useLanguage();
   const totalRecipients = summaryStats.totalRecipients;
   const incomeGap = summaryStats.averageExpenses - summaryStats.averageIncome;
 
@@ -25,26 +27,26 @@ export default function Report() {
           
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-white">Zakat Recipients Report</h1>
-            <p className="text-base text-gray-400 mt-2">Comprehensive analysis of {totalRecipients.toLocaleString()} asnaf in Kedah (2022-2024)</p>
+            <h1 className="text-3xl font-bold text-white">{t('report.title')} {t('report.title2')}</h1>
+            <p className="text-base text-gray-400 mt-2">{t('report.subtitle')}</p>
           </div>
 
           {/* Summary Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div className="bg-gradient-to-br from-purple-500/20 to-purple-600/10 backdrop-blur-sm rounded-2xl p-5 border border-purple-500/20">
-              <p className="text-sm text-purple-300 mb-1">Total Recipients</p>
+              <p className="text-sm text-purple-300 mb-1">{t('common.total')} {t('common.recipients')}</p>
               <p className="text-3xl font-bold text-white">{totalRecipients.toLocaleString()}</p>
             </div>
             <div className="bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 backdrop-blur-sm rounded-2xl p-5 border border-emerald-500/20">
-              <p className="text-sm text-emerald-300 mb-1">Average Income</p>
+              <p className="text-sm text-emerald-300 mb-1">{t('overview.avgIncome')}</p>
               <p className="text-3xl font-bold text-emerald-400">RM {summaryStats.averageIncome.toFixed(0)}</p>
             </div>
             <div className="bg-gradient-to-br from-red-500/20 to-red-600/10 backdrop-blur-sm rounded-2xl p-5 border border-red-500/20">
-              <p className="text-sm text-red-300 mb-1">Average Expenses</p>
+              <p className="text-sm text-red-300 mb-1">{t('overview.avgExpense')}</p>
               <p className="text-3xl font-bold text-red-400">RM {summaryStats.averageExpenses.toFixed(0)}</p>
             </div>
             <div className="bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 backdrop-blur-sm rounded-2xl p-5 border border-yellow-500/20">
-              <p className="text-sm text-yellow-300 mb-1">Income Gap</p>
+              <p className="text-sm text-yellow-300 mb-1">{t('overview.monthlyGap')}</p>
               <p className="text-3xl font-bold text-yellow-400">-RM {incomeGap.toFixed(0)}</p>
             </div>
           </div>
@@ -52,8 +54,8 @@ export default function Report() {
           <div className="grid lg:grid-cols-2 gap-6 mb-8">
             {/* Health Status */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-              <h3 className="text-base font-semibold text-white mb-1">Health Status</h3>
-              <p className="text-sm text-gray-400 mb-6">Recipients by health condition</p>
+              <h3 className="text-base font-semibold text-white mb-1">{t('report.healthStatus')}</h3>
+              <p className="text-sm text-gray-400 mb-6">{t('report.recipientsByHealth')}</p>
               <div className="space-y-3">
                 {healthStatusDistribution.map((item, i) => (
                   <div key={i}>
@@ -74,8 +76,8 @@ export default function Report() {
 
             {/* Marital Status */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-              <h3 className="text-base font-semibold text-white mb-1">Marital Status</h3>
-              <p className="text-sm text-gray-400 mb-6">Distribution by family status</p>
+              <h3 className="text-base font-semibold text-white mb-1">{t('report.maritalStatus')}</h3>
+              <p className="text-sm text-gray-400 mb-6">{t('report.distributionByFamily')}</p>
               <div className="space-y-3">
                 {maritalStatusDistribution.slice(0, 5).map((item, i) => {
                   const percentage = (item.count / totalRecipients) * 100;
@@ -101,7 +103,7 @@ export default function Report() {
           <div className="grid lg:grid-cols-3 gap-6 mb-8">
             {/* Employment Status */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-              <h3 className="text-base font-semibold text-white mb-4">Employment Status</h3>
+              <h3 className="text-base font-semibold text-white mb-4">{t('report.employmentStatus')}</h3>
               <div className="space-y-3">
                 {jobTypeDistribution.map((job, i) => (
                   <div key={i} className="flex items-center justify-between">
@@ -117,7 +119,7 @@ export default function Report() {
 
             {/* Expense Breakdown */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-              <h3 className="text-base font-semibold text-white mb-4">Monthly Expenses</h3>
+              <h3 className="text-base font-semibold text-white mb-4">{t('report.monthlyExpenses')}</h3>
               <div className="space-y-3">
                 {expenseCategories.map((exp, i) => (
                   <div key={i}>
@@ -138,7 +140,7 @@ export default function Report() {
 
             {/* Housing */}
             <div className="bg-gradient-to-br from-purple-600/30 to-pink-600/20 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/30">
-              <h3 className="text-base font-semibold text-white mb-4">Housing Type</h3>
+              <h3 className="text-base font-semibold text-white mb-4">{t('report.housingType')}</h3>
               <div className="space-y-4">
                 {houseTypeDistribution.map((house, i) => (
                   <div key={i}>
@@ -156,7 +158,7 @@ export default function Report() {
                 ))}
               </div>
               <div className="mt-6 pt-4 border-t border-white/10">
-                <p className="text-xs text-gray-400">Based on house structure type (Batu/Kayu)</p>
+                <p className="text-xs text-gray-400">{t('report.basedOnHouse')}</p>
               </div>
             </div>
           </div>
@@ -164,8 +166,8 @@ export default function Report() {
           <div className="grid lg:grid-cols-2 gap-6 mb-8">
             {/* Yearly Recipients */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-              <h3 className="text-base font-semibold text-white mb-1">Recipients by Year</h3>
-              <p className="text-sm text-gray-400 mb-6">Annual distribution (2022-2024)</p>
+              <h3 className="text-base font-semibold text-white mb-1">{t('report.recipientsByYear')}</h3>
+              <p className="text-sm text-gray-400 mb-6">{t('report.annualDistribution')}</p>
               <div className="space-y-4">
                 {yearlyBreakdown.map((year, i) => (
                   <div key={i}>
@@ -183,15 +185,15 @@ export default function Report() {
                 ))}
               </div>
               <div className="mt-4 pt-4 border-t border-purple-500/20 flex justify-between text-sm text-gray-400">
-                <span>Total: {totalRecipients.toLocaleString()}</span>
-                <span>Avg/Year: {Math.round(totalRecipients / 3).toLocaleString()}</span>
+                <span>{t('common.total')}: {totalRecipients.toLocaleString()}</span>
+                <span>{t('report.avgYear')}: {Math.round(totalRecipients / 3).toLocaleString()}</span>
               </div>
             </div>
 
             {/* Asset Ownership */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-              <h3 className="text-base font-semibold text-white mb-1">Asset Ownership</h3>
-              <p className="text-sm text-gray-400 mb-6">Household items owned by recipients</p>
+              <h3 className="text-base font-semibold text-white mb-1">{t('report.assetOwnership')}</h3>
+              <p className="text-sm text-gray-400 mb-6">{t('report.householdItems')}</p>
               <div className="grid grid-cols-2 gap-3">
                 {assetOwnership.slice(0, 8).map((asset, i) => (
                   <div key={i} className="bg-white/5 rounded-xl p-3 border border-purple-500/20">
@@ -207,7 +209,7 @@ export default function Report() {
 
           {/* Key Insights */}
           <div className="bg-gradient-to-r from-pink-500/10 to-cyan-500/10 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-            <h3 className="text-base font-semibold text-white mb-4">Key Findings</h3>
+            <h3 className="text-base font-semibold text-white mb-4">{t('report.findings.title')}</h3>
             <div className="grid sm:grid-cols-3 gap-4">
               <div className="flex items-start gap-3">
                 <div className="w-7 h-7 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 text-white flex items-center justify-center text-sm flex-shrink-0 shadow-lg shadow-pink-500/30">1</div>

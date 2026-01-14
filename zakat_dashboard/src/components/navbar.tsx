@@ -3,20 +3,24 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Globe } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { language, setLanguage, t } = useLanguage();
 
   const navItems = [
-    { name: 'Home', href: '/' },
-    { name: 'About', href: '/about' },
-    { name: 'Overview', href: '/overview' },
-    { name: 'Forecast', href: '/forecast' },
-    { name: 'Statistics', href: '/statistics' },
-    { name: 'Report', href: '/report' },
+    { nameKey: 'nav.home', href: '/' },
+    { nameKey: 'nav.about', href: '/about' },
+    { nameKey: 'nav.overview', href: '/overview' },
+    { nameKey: 'nav.forecast', href: '/forecast' },
+    { nameKey: 'nav.statistics', href: '/statistics' },
+    { nameKey: 'nav.report', href: '/report' },
+    { nameKey: 'nav.faq', href: '/faq' },
   ];
 
   useEffect(() => {
@@ -48,24 +52,66 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center">
             <div className="flex items-center space-x-1">
               {navItems.map((item) => (
                 <Link
-                  key={item.name}
+                  key={item.nameKey}
                   href={item.href}
-                  className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+                  className={`relative px-3 py-2 text-sm font-medium rounded-lg transition-all ${
                     isActive(item.href)
                       ? 'text-white bg-gradient-to-r from-pink-500/20 to-purple-500/20 border border-purple-500/30'
                       : 'text-gray-300 hover:text-white hover:bg-white/5'
                   }`}
                 >
-                  {item.name}
+                  {t(item.nameKey)}
                   {isActive(item.href) && (
                     <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-gradient-to-r from-pink-500 to-cyan-400 rounded-full"></span>
                   )}
                 </Link>
               ))}
+            </div>
+
+            {/* Language Switcher - Desktop */}
+            <div className="ml-4 relative">
+              <button
+                onClick={() => setLangMenuOpen(!langMenuOpen)}
+                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-all border border-purple-500/20"
+              >
+                <Globe size={16} />
+                <span>{language === 'en' ? 'EN' : 'BM'}</span>
+              </button>
+              
+              {langMenuOpen && (
+                <div className="absolute right-0 mt-2 w-36 bg-[#1a1035] border border-purple-500/30 rounded-lg shadow-xl shadow-purple-900/30 overflow-hidden z-50">
+                  <button
+                    onClick={() => {
+                      setLanguage('en');
+                      setLangMenuOpen(false);
+                    }}
+                    className={`w-full px-4 py-2.5 text-left text-sm transition-colors flex items-center gap-2 ${
+                      language === 'en'
+                        ? 'bg-pink-500/20 text-white'
+                        : 'text-gray-300 hover:bg-white/5 hover:text-white'
+                    }`}
+                  >
+                    <span>🇬🇧</span> English
+                  </button>
+                  <button
+                    onClick={() => {
+                      setLanguage('ms');
+                      setLangMenuOpen(false);
+                    }}
+                    className={`w-full px-4 py-2.5 text-left text-sm transition-colors flex items-center gap-2 ${
+                      language === 'ms'
+                        ? 'bg-pink-500/20 text-white'
+                        : 'text-gray-300 hover:bg-white/5 hover:text-white'
+                    }`}
+                  >
+                    <span>🇲🇾</span> Bahasa Melayu
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 
@@ -88,7 +134,7 @@ export default function Navbar() {
           <div className="px-4 py-3 space-y-1">
             {navItems.map((item) => (
               <Link
-                key={item.name}
+                key={item.nameKey}
                 href={item.href}
                 className={`block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors ${
                   isActive(item.href)
@@ -97,9 +143,41 @@ export default function Navbar() {
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                {item.name}
+                {t(item.nameKey)}
               </Link>
             ))}
+            
+            {/* Language Switcher - Mobile */}
+            <div className="pt-2 border-t border-purple-500/20 mt-2">
+              <div className="flex gap-2 px-4">
+                <button
+                  onClick={() => {
+                    setLanguage('en');
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`flex-1 px-3 py-2 text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2 ${
+                    language === 'en'
+                      ? 'bg-gradient-to-r from-pink-500/30 to-purple-500/30 text-white border border-purple-500/30'
+                      : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <span>🇬🇧</span> EN
+                </button>
+                <button
+                  onClick={() => {
+                    setLanguage('ms');
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`flex-1 px-3 py-2 text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2 ${
+                    language === 'ms'
+                      ? 'bg-gradient-to-r from-pink-500/30 to-purple-500/30 text-white border border-purple-500/30'
+                      : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <span>🇲🇾</span> BM
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

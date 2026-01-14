@@ -3,6 +3,7 @@
 import Navbar from '@/components/navbar';
 import { useState, useMemo } from 'react';
 import { summaryStats, yearlyBreakdown } from '@/data/zakatData';
+import { useLanguage } from '@/context/LanguageContext';
 
 const modelMetrics = {
   accuracy: 94.73,
@@ -24,6 +25,7 @@ const multiYearForecast = {
 };
 
 export default function Forecast() {
+  const { t } = useLanguage();
   const [income, setIncome] = useState(1200);
   const [expenses, setExpenses] = useState(1800);
   const [dependents, setDependents] = useState(3);
@@ -106,26 +108,26 @@ export default function Forecast() {
         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-8">
           
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-white">Poverty Escape Predictor</h1>
-            <p className="text-base text-gray-400 mt-2">SVM-powered prediction with {modelMetrics.accuracy}% accuracy</p>
+            <h1 className="text-3xl font-bold text-white">{t('forecast.title')} {t('forecast.title2')}</h1>
+            <p className="text-base text-gray-400 mt-2">{t('forecast.subtitle')}</p>
           </div>
 
           {/* Model Stats */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div className="bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 backdrop-blur-sm rounded-2xl p-5 border border-emerald-500/20">
-              <p className="text-sm text-emerald-300 mb-1">Accuracy</p>
+              <p className="text-sm text-emerald-300 mb-1">{t('about.model.accuracy')}</p>
               <p className="text-3xl font-bold text-emerald-400">{modelMetrics.accuracy}%</p>
             </div>
             <div className="bg-gradient-to-br from-cyan-500/20 to-cyan-600/10 backdrop-blur-sm rounded-2xl p-5 border border-cyan-500/20">
-              <p className="text-sm text-cyan-300 mb-1">Precision</p>
+              <p className="text-sm text-cyan-300 mb-1">{t('about.model.precision')}</p>
               <p className="text-3xl font-bold text-cyan-400">{modelMetrics.precision}%</p>
             </div>
             <div className="bg-gradient-to-br from-purple-500/20 to-purple-600/10 backdrop-blur-sm rounded-2xl p-5 border border-purple-500/20">
-              <p className="text-sm text-purple-300 mb-1">Recall</p>
+              <p className="text-sm text-purple-300 mb-1">{t('about.model.recall')}</p>
               <p className="text-3xl font-bold text-purple-400">{modelMetrics.recall}%</p>
             </div>
             <div className="bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 backdrop-blur-sm rounded-2xl p-5 border border-yellow-500/20">
-              <p className="text-sm text-yellow-300 mb-1">ROC-AUC</p>
+              <p className="text-sm text-yellow-300 mb-1">{t('about.model.roc')}</p>
               <p className="text-3xl font-bold text-yellow-400">{modelMetrics.rocAuc}%</p>
             </div>
           </div>
@@ -134,11 +136,11 @@ export default function Forecast() {
           <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 mb-8">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h3 className="text-base font-semibold text-white">General Multi-Year Forecast</h3>
-                <p className="text-sm text-gray-400 mt-1">Consolidated poverty escape projections (2022-2027)</p>
+                <h3 className="text-base font-semibold text-white">{t('forecast.generalForecast')}</h3>
+                <p className="text-sm text-gray-400 mt-1">{t('forecast.consolidatedProjections')}</p>
               </div>
               <div className="px-3 py-1 rounded-full bg-gradient-to-r from-pink-500/20 to-purple-500/20 border border-pink-500/30">
-                <span className="text-sm font-medium text-pink-300">{multiYearForecast.totalRecipients.toLocaleString()} Total Recipients</span>
+                <span className="text-sm font-medium text-pink-300">{multiYearForecast.totalRecipients.toLocaleString()} {t('forecast.totalRecipients')}</span>
               </div>
             </div>
 
@@ -146,30 +148,30 @@ export default function Forecast() {
             <div className="grid grid-cols-3 gap-4 mb-6">
               <div className="bg-white/5 rounded-xl p-4 border border-purple-500/20 text-center">
                 <p className="text-3xl font-bold text-white">{multiYearForecast.averagePerYear.toLocaleString()}</p>
-                <p className="text-sm text-gray-400 mt-1">Avg Recipients/Year</p>
+                <p className="text-sm text-gray-400 mt-1">{t('forecast.avgRecipientsYear')}</p>
               </div>
               <div className="bg-white/5 rounded-xl p-4 border border-purple-500/20 text-center">
                 <p className="text-3xl font-bold text-emerald-400">{multiYearForecast.escapeRate2024}%</p>
-                <p className="text-sm text-gray-400 mt-1">2024 Escape Rate</p>
+                <p className="text-sm text-gray-400 mt-1">2024 {t('forecast.escapeRate')}</p>
               </div>
               <div className="bg-white/5 rounded-xl p-4 border border-purple-500/20 text-center">
                 <p className="text-3xl font-bold text-cyan-400">{multiYearForecast.projectedEscapeRate2027}%</p>
-                <p className="text-sm text-gray-400 mt-1">2027 Projected</p>
+                <p className="text-sm text-gray-400 mt-1">2027 {t('common.projected')}</p>
               </div>
             </div>
 
             {/* Redesigned Line Chart */}
             <div className="mb-6">
               <div className="flex items-center justify-between mb-5">
-                <p className="text-base font-medium text-white">Escape Rate Trend</p>
+                <p className="text-base font-medium text-white">{t('forecast.escapeRateTrend')}</p>
                 <div className="flex items-center gap-6 text-xs">
                   <span className="flex items-center gap-2">
                     <span className="w-8 h-[2px] bg-blue-500 rounded-full"></span>
-                    <span className="text-gray-400">Actual</span>
+                    <span className="text-gray-400">{t('forecast.actual')}</span>
                   </span>
                   <span className="flex items-center gap-2">
                     <span className="w-8 h-[2px] rounded-full" style={{ backgroundImage: 'repeating-linear-gradient(90deg, #f97316 0px, #f97316 4px, transparent 4px, transparent 8px)' }}></span>
-                    <span className="text-gray-400">Forecast</span>
+                    <span className="text-gray-400">{t('forecast.forecastLabel')}</span>
                   </span>
                 </div>
               </div>
@@ -296,7 +298,7 @@ export default function Forecast() {
                 
                 {/* X-axis label */}
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-[10px] text-gray-500">
-                  Year
+                  {t('common.year')}
                 </div>
               </div>
               
@@ -304,19 +306,19 @@ export default function Forecast() {
               <div className="flex justify-between mt-4 px-2">
                 <div className="text-center">
                   <p className="text-xl font-bold text-pink-400">+31.7%</p>
-                  <p className="text-xs text-gray-500">Growth (22-24)</p>
+                  <p className="text-xs text-gray-500">{t('forecast.growth')} (22-24)</p>
                 </div>
                 <div className="text-center">
                   <p className="text-xl font-bold text-purple-400">16.2%</p>
-                  <p className="text-xs text-gray-500">Current Rate</p>
+                  <p className="text-xs text-gray-500">{t('forecast.currentRate')}</p>
                 </div>
                 <div className="text-center">
                   <p className="text-xl font-bold text-cyan-400">24.0%</p>
-                  <p className="text-xs text-gray-500">2027 Target</p>
+                  <p className="text-xs text-gray-500">2027 {t('forecast.target')}</p>
                 </div>
                 <div className="text-center">
                   <p className="text-xl font-bold text-emerald-400">+48%</p>
-                  <p className="text-xs text-gray-500">Projected Growth</p>
+                  <p className="text-xs text-gray-500">{t('forecast.projectedGrowth')}</p>
                 </div>
               </div>
             </div>
@@ -326,15 +328,15 @@ export default function Forecast() {
               <div className="flex items-start gap-3">
                 <div className="w-6 h-6 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center text-white text-xs shrink-0 shadow-lg shadow-pink-500/30">↑</div>
                 <div>
-                  <p className="text-sm font-medium text-white">Improving Trend</p>
-                  <p className="text-xs text-gray-400 mt-0.5">Escape rate increased from 12.3% (2022) to 16.2% (2024), a 31.7% improvement</p>
+                  <p className="text-sm font-medium text-white">{t('forecast.improvingTrend')}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{t('forecast.improvingDesc')}</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <div className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-white text-xs shrink-0 shadow-lg shadow-cyan-500/30">📈</div>
                 <div>
-                  <p className="text-sm font-medium text-white">3-Year Projection</p>
-                  <p className="text-xs text-gray-400 mt-0.5">Model predicts escape rate to reach 24% by 2027 with current intervention strategies</p>
+                  <p className="text-sm font-medium text-white">{t('forecast.threeYearProjection')}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{t('forecast.projectionDesc')}</p>
                 </div>
               </div>
             </div>
@@ -343,7 +345,7 @@ export default function Forecast() {
           <div className="grid lg:grid-cols-2 gap-6">
             {/* Input Form */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-              <h3 className="text-base font-semibold text-white mb-6">Recipient Information</h3>
+              <h3 className="text-base font-semibold text-white mb-6">{t('forecast.recipientInfo')}</h3>
               
               <div className="space-y-5">
                 <div>

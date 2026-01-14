@@ -11,6 +11,7 @@ import {
   monthlyDistribution,
 } from '@/data/zakatData';
 import type { DistrictInfo } from '@/components/KedahMap';
+import { useLanguage } from '@/context/LanguageContext';
 
 // Dynamic import for the map to avoid SSR issues
 const KedahMap = dynamic(() => import('@/components/KedahMap'), {
@@ -29,6 +30,7 @@ const KedahMap = dynamic(() => import('@/components/KedahMap'), {
 });
 
 export default function Overview() {
+  const { t } = useLanguage();
   const [selectedYear, setSelectedYear] = useState<'2022' | '2023' | '2024'>('2024');
   const [selectedDistrict, setSelectedDistrict] = useState<DistrictInfo | null>(null);
 
@@ -55,8 +57,8 @@ export default function Overview() {
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8">
             <div>
-              <h1 className="text-3xl font-bold text-white">Dashboard Overview</h1>
-              <p className="text-base text-gray-400 mt-2">{summaryStats.totalRecipients.toLocaleString()} recipients across {summaryStats.totalDistricts} districts</p>
+              <h1 className="text-3xl font-bold text-white">{t('overview.title')} {t('overview.title2')}</h1>
+              <p className="text-base text-gray-400 mt-2">{summaryStats.totalRecipients.toLocaleString()} {t('common.recipients').toLowerCase()} - {summaryStats.totalDistricts} {t('home.stats.districts').toLowerCase()}</p>
             </div>
             <select 
               value={selectedYear}
@@ -72,19 +74,19 @@ export default function Overview() {
           {/* Stats Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div className="bg-gradient-to-br from-pink-500/20 to-pink-600/10 backdrop-blur-sm rounded-2xl p-5 border border-pink-500/20">
-              <p className="text-sm text-pink-300 mb-1">Recipients ({selectedYear})</p>
+              <p className="text-sm text-pink-300 mb-1">{t('overview.recipients')} ({selectedYear})</p>
               <p className="text-3xl font-bold text-white">{yearData.recipients.toLocaleString()}</p>
             </div>
             <div className="bg-gradient-to-br from-emerald-500/20 to-emerald-600/10 backdrop-blur-sm rounded-2xl p-5 border border-emerald-500/20">
-              <p className="text-sm text-emerald-300 mb-1">Avg. Income</p>
+              <p className="text-sm text-emerald-300 mb-1">{t('overview.avgIncome')}</p>
               <p className="text-3xl font-bold text-emerald-400">RM {summaryStats.averageIncome.toFixed(0)}</p>
             </div>
             <div className="bg-gradient-to-br from-red-500/20 to-red-600/10 backdrop-blur-sm rounded-2xl p-5 border border-red-500/20">
-              <p className="text-sm text-red-300 mb-1">Avg. Expenses</p>
+              <p className="text-sm text-red-300 mb-1">{t('overview.avgExpense')}</p>
               <p className="text-3xl font-bold text-red-400">RM {summaryStats.averageExpenses.toFixed(0)}</p>
             </div>
             <div className="bg-gradient-to-br from-purple-500/20 to-purple-600/10 backdrop-blur-sm rounded-2xl p-5 border border-purple-500/20">
-              <p className="text-sm text-purple-300 mb-1">Unemployed Rate</p>
+              <p className="text-sm text-purple-300 mb-1">{t('overview.unemployedRate')}</p>
               <p className="text-3xl font-bold text-white">{summaryStats.unemployedPercentage}%</p>
             </div>
           </div>
@@ -93,10 +95,10 @@ export default function Overview() {
             {/* Monthly Chart */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
               <div className="flex items-center justify-between mb-1">
-                <h3 className="text-base font-semibold text-white">Monthly Recipients ({selectedYear})</h3>
-                <span className="text-sm font-bold text-cyan-400">{monthlyData.reduce((sum, d) => sum + d.count, 0).toLocaleString()} total</span>
+                <h3 className="text-base font-semibold text-white">{t('overview.monthlyRecipients')} ({selectedYear})</h3>
+                <span className="text-sm font-bold text-cyan-400">{monthlyData.reduce((sum, d) => sum + d.count, 0).toLocaleString()} {t('common.total2')}</span>
               </div>
-              <p className="text-sm text-gray-400 mb-6">Hover over bars to see details</p>
+              <p className="text-sm text-gray-400 mb-6">{t('overview.hoverDetails')}</p>
               <div className="flex items-end justify-between gap-2" style={{ height: '160px' }}>
                 {monthlyData.map((data, index) => {
                   const barHeight = (data.count / maxMonthlyCount) * 100;
@@ -121,10 +123,10 @@ export default function Overview() {
             {/* Interactive District Map */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
               <div className="flex items-center justify-between mb-1">
-                <h3 className="text-base font-semibold text-white">Kedah District Map</h3>
-                <span className="text-sm text-gray-400">Click on a district</span>
+                <h3 className="text-base font-semibold text-white">{t('overview.districtMap')}</h3>
+                <span className="text-sm text-gray-400">{t('overview.clickDistrict')}</span>
               </div>
-              <p className="text-sm text-gray-400 mb-4">Interactive map showing recipient distribution</p>
+              <p className="text-sm text-gray-400 mb-4">{t('overview.interactiveMap')}</p>
               
               <div className="flex gap-4">
                 {/* Real Map */}
@@ -149,21 +151,21 @@ export default function Overview() {
                       
                       <div className="space-y-2 flex-1">
                         <div className="bg-white/5 rounded-lg p-2">
-                          <p className="text-[10px] text-gray-400">Recipients</p>
+                          <p className="text-[10px] text-gray-400">{t('common.recipients')}</p>
                           <p className="text-lg font-bold text-cyan-400">{selectedDistrict.count.toLocaleString()}</p>
                         </div>
                         <div className="grid grid-cols-2 gap-2">
                           <div className="bg-white/5 rounded-lg p-2">
-                            <p className="text-[10px] text-gray-400">Avg Income</p>
+                            <p className="text-[10px] text-gray-400">{t('overview.avgIncome2')}</p>
                             <p className="text-sm font-bold text-emerald-400">RM {selectedDistrict.avgIncome}</p>
                           </div>
                           <div className="bg-white/5 rounded-lg p-2">
-                            <p className="text-[10px] text-gray-400">Avg Expense</p>
+                            <p className="text-[10px] text-gray-400">{t('overview.avgExpense2')}</p>
                             <p className="text-sm font-bold text-red-400">RM {selectedDistrict.avgExpense}</p>
                           </div>
                         </div>
                         <div className="bg-white/5 rounded-lg p-2">
-                          <p className="text-[10px] text-gray-400">Unemployed Rate</p>
+                          <p className="text-[10px] text-gray-400">{t('overview.unemployedRate')}</p>
                           <div className="flex items-center gap-2">
                             <div className="flex-1 bg-purple-900/30 rounded-full h-2">
                               <div 
@@ -178,7 +180,7 @@ export default function Overview() {
                       
                       <div className="mt-2 pt-2 border-t border-purple-500/20">
                         <p className="text-[9px] text-gray-500">
-                          Gap: <span className="text-red-400 font-medium">-RM {selectedDistrict.avgExpense - selectedDistrict.avgIncome}</span>/month
+                          {t('overview.gap')}: <span className="text-red-400 font-medium">-RM {selectedDistrict.avgExpense - selectedDistrict.avgIncome}</span>/{t('overview.month')}
                         </p>
                       </div>
                     </div>
@@ -187,8 +189,8 @@ export default function Overview() {
                       <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center mb-2">
                         <span className="text-lg">📍</span>
                       </div>
-                      <p className="text-xs text-gray-400">Click on a district</p>
-                      <p className="text-[10px] text-gray-500">to view details</p>
+                      <p className="text-xs text-gray-400">{t('overview.clickDistrict')}</p>
+                      <p className="text-[10px] text-gray-500">{t('overview.viewDetails')}</p>
                     </div>
                   )}
                 </div>
@@ -198,7 +200,7 @@ export default function Overview() {
               <div className="flex items-center justify-center gap-4 mt-4 pt-3 border-t border-purple-500/10">
                 <div className="flex items-center gap-1.5">
                   <div className="w-3 h-3 rounded-full bg-cyan-500"></div>
-                  <span className="text-[10px] text-gray-400">&lt;55% unemployed</span>
+                  <span className="text-[10px] text-gray-400">&lt;55% {t('overview.employment').toLowerCase()}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <div className="w-3 h-3 rounded-full bg-purple-500"></div>
@@ -219,8 +221,8 @@ export default function Overview() {
           <div className="grid lg:grid-cols-2 gap-6 mb-8">
             {/* Top Districts List */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-              <h3 className="text-base font-semibold text-white mb-1">Top Districts</h3>
-              <p className="text-sm text-gray-400 mb-6">Recipients by location</p>
+              <h3 className="text-base font-semibold text-white mb-1">{t('stats.topDistrict')}</h3>
+              <p className="text-sm text-gray-400 mb-6">{t('common.recipients')} {t('common.district').toLowerCase()}</p>
               <div className="space-y-3">
                 {topDistricts.map((item, index) => (
                   <div key={index}>
@@ -240,7 +242,7 @@ export default function Overview() {
             </div>
             {/* Gender */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-              <h3 className="text-base font-semibold text-white mb-4">Gender Distribution</h3>
+              <h3 className="text-base font-semibold text-white mb-4">{t('stats.demographicInsights')}</h3>
               <div className="flex items-center justify-center">
                 <div className="relative w-32 h-32">
                   <svg className="w-full h-full transform -rotate-90">
@@ -258,25 +260,25 @@ export default function Overview() {
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
                     <span className="text-xl font-bold text-white">{summaryStats.femalePercentage}%</span>
-                    <span className="text-[10px] text-gray-400">Female</span>
+                    <span className="text-[10px] text-gray-400">{t('stats.female')}</span>
                   </div>
                 </div>
               </div>
               <div className="flex justify-center gap-6 mt-4">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-pink-500 rounded-full"></div>
-                  <span className="text-sm text-gray-400">Female {summaryStats.femalePercentage}%</span>
+                  <span className="text-sm text-gray-400">{t('stats.female')} {summaryStats.femalePercentage}%</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 bg-purple-900/50 rounded-full"></div>
-                  <span className="text-sm text-gray-400">Male {100 - summaryStats.femalePercentage}%</span>
+                  <span className="text-sm text-gray-400">{t('stats.male')} {100 - summaryStats.femalePercentage}%</span>
                 </div>
               </div>
             </div>
 
             {/* Employment */}
             <div className="bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20">
-              <h3 className="text-base font-semibold text-white mb-4">Employment Status</h3>
+              <h3 className="text-base font-semibold text-white mb-4">{t('overview.employment')}</h3>
               <div className="space-y-3">
                 {jobTypeDistribution.slice(0, 4).map((job, i) => (
                   <div key={i}>
@@ -294,22 +296,22 @@ export default function Overview() {
 
             {/* Quick Stats */}
             <div className="bg-gradient-to-br from-purple-600/30 to-pink-600/20 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/30">
-              <h3 className="text-base font-semibold text-white mb-4">Key Insights</h3>
+              <h3 className="text-base font-semibold text-white mb-4">{t('overview.quickstats')}</h3>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-300">Healthy Recipients</span>
+                  <span className="text-sm text-gray-300">{t('stats.healthy')} {t('common.recipients')}</span>
                   <span className="text-base font-bold text-emerald-400">{summaryStats.healthyPercentage}%</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-300">Married</span>
+                  <span className="text-sm text-gray-300">{t('stats.married')}</span>
                   <span className="text-base font-bold text-pink-400">{summaryStats.marriedPercentage}%</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-300">Average Age</span>
-                  <span className="text-base font-bold text-cyan-400">{summaryStats.averageAge} years</span>
+                  <span className="text-sm text-gray-300">{t('stats.averageAge')}</span>
+                  <span className="text-base font-bold text-cyan-400">{summaryStats.averageAge} {t('common.years')}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-300">Income Gap</span>
+                  <span className="text-sm text-gray-300">{t('overview.gap')}</span>
                   <span className="text-base font-bold text-red-400">-RM {(summaryStats.averageExpenses - summaryStats.averageIncome).toFixed(0)}</span>
                 </div>
               </div>

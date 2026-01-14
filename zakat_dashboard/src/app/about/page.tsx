@@ -1,6 +1,10 @@
+'use client';
+
 import Navbar from '@/components/navbar';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function About() {
+  const { t } = useLanguage();
   const models = [
     { name: 'SVM (RBF)', accuracy: 94.73, precision: 94.80, recall: 94.73, f1: 94.70, roc: 98.96, selected: true, color: 'pink' },
     { name: 'Gradient Boosting', accuracy: 94.12, precision: 94.15, recall: 94.12, f1: 94.10, roc: 98.45, selected: false, color: 'yellow' },
@@ -8,21 +12,32 @@ export default function About() {
     { name: 'Logistic Regression', accuracy: 91.25, precision: 91.30, recall: 91.25, f1: 91.20, roc: 96.42, selected: false, color: 'blue' },
   ];
 
-  const features = [
-    { icon: '👤', title: 'Demographics', desc: 'Age, gender, marital status, dependents', gradient: 'from-pink-500 to-rose-500' },
-    { icon: '💰', title: 'Financial Status', desc: 'Income, expenses, savings, debts', gradient: 'from-emerald-500 to-teal-500' },
-    { icon: '💼', title: 'Employment', desc: 'Job type, occupation sector, skills', gradient: 'from-blue-500 to-indigo-500' },
-    { icon: '🏥', title: 'Health', desc: 'Health status, disabilities, chronic illness', gradient: 'from-red-500 to-pink-500' },
-    { icon: '🏠', title: 'Assets', desc: 'Property, vehicles, appliances owned', gradient: 'from-purple-500 to-violet-500' },
-    { icon: '📍', title: 'Geographic', desc: 'District, urban/rural location', gradient: 'from-cyan-500 to-blue-500' },
+  const getFeatures = () => [
+    { icon: '👤', titleKey: 'about.feat.demographics', descKey: 'about.feat.demographics.desc', gradient: 'from-pink-500 to-rose-500' },
+    { icon: '💰', titleKey: 'about.feat.financial', descKey: 'about.feat.financial.desc', gradient: 'from-emerald-500 to-teal-500' },
+    { icon: '💼', titleKey: 'about.feat.employment', descKey: 'about.feat.employment.desc', gradient: 'from-blue-500 to-indigo-500' },
+    { icon: '🏥', titleKey: 'about.feat.health', descKey: 'about.feat.health.desc', gradient: 'from-red-500 to-pink-500' },
+    { icon: '🏠', titleKey: 'about.feat.assets', descKey: 'about.feat.assets.desc', gradient: 'from-purple-500 to-violet-500' },
+    { icon: '📍', titleKey: 'about.feat.geographic', descKey: 'about.feat.geographic.desc', gradient: 'from-cyan-500 to-blue-500' },
   ];
 
-  const methodology = [
-    { step: '01', title: 'Data Collection', desc: 'Gathered comprehensive data from LZNK on 51,962 recipients across all 12 districts in Kedah state.', icon: '📊' },
-    { step: '02', title: 'Feature Engineering', desc: 'Processed and engineered 113 features including income ratios, expense patterns, and risk indicators.', icon: '⚙️' },
-    { step: '03', title: 'Model Training', desc: 'Compared multiple ML algorithms: Logistic Regression, Random Forest, SVM, and Gradient Boosting.', icon: '🤖' },
-    { step: '04', title: 'Validation', desc: 'Applied stratified k-fold cross-validation to ensure robust and reliable performance estimates.', icon: '✅' },
+  const getMethodology = () => [
+    { step: '01', titleKey: 'about.method1.title', descKey: 'about.method1.desc', icon: '📊' },
+    { step: '02', titleKey: 'about.method2.title', descKey: 'about.method2.desc', icon: '⚙️' },
+    { step: '03', titleKey: 'about.method3.title', descKey: 'about.method3.desc', icon: '🤖' },
+    { step: '04', titleKey: 'about.method4.title', descKey: 'about.method4.desc', icon: '✅' },
   ];
+
+  const getSvmReasons = () => [
+    { titleKey: 'about.svm1.title', descKey: 'about.svm1.desc', color: 'pink' },
+    { titleKey: 'about.svm2.title', descKey: 'about.svm2.desc', color: 'cyan' },
+    { titleKey: 'about.svm3.title', descKey: 'about.svm3.desc', color: 'purple' },
+    { titleKey: 'about.svm4.title', descKey: 'about.svm4.desc', color: 'emerald' },
+  ];
+
+  const features = getFeatures();
+  const methodology = getMethodology();
+  const svmReasons = getSvmReasons();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0f0a1e] via-[#1a1035] to-[#0d1a2d]">
@@ -35,23 +50,23 @@ export default function About() {
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 mb-6">
               <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
-              <span className="text-sm text-purple-300">Research Project</span>
+              <span className="text-sm text-purple-300">{t('about.badge')}</span>
             </div>
             <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-              About This <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">Research</span>
+              {t('about.title')} <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">{t('about.title2')}</span>
             </h1>
             <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              Machine Learning-Powered Poverty Escape Prediction for Zakat Recipients in Kedah, Malaysia
+              {t('about.subtitle')}
             </p>
           </div>
 
           {/* Stats Banner */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
             {[
-              { value: '51,962', label: 'Recipients Analyzed', icon: '👥' },
-              { value: '113', label: 'Features Processed', icon: '📈' },
-              { value: '12', label: 'Districts Covered', icon: '📍' },
-              { value: '3 Years', label: 'Data Collected', icon: '📅' },
+              { value: '51,962', label: t('home.stats.recipients'), icon: '👥' },
+              { value: '113', label: t('home.stats.features'), icon: '📈' },
+              { value: '12', label: t('home.stats.districts'), icon: '📍' },
+              { value: '3', label: t('about.dataCollected'), icon: '📅' },
             ].map((stat, i) => (
               <div key={i} className="group relative bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 hover:border-purple-500/40 transition-all hover:scale-[1.02]">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -71,8 +86,8 @@ export default function About() {
                   📋
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-white">Research Overview</h2>
-                  <p className="text-base text-gray-400">Understanding the project scope and objectives</p>
+                  <h2 className="text-xl font-bold text-white">{t('about.researchOverview')}</h2>
+                  <p className="text-base text-gray-400">{t('about.understandingScope')}</p>
                 </div>
               </div>
               <div className="space-y-4 text-gray-300 leading-relaxed text-base">
@@ -98,8 +113,8 @@ export default function About() {
                 🎯
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white">Model Performance</h2>
-                <p className="text-base text-gray-400">Comparing machine learning algorithms</p>
+                <h2 className="text-xl font-bold text-white">{t('about.modelPerformance')}</h2>
+                <p className="text-base text-gray-400">{t('about.comparingAlgorithms')}</p>
               </div>
             </div>
 
@@ -116,7 +131,7 @@ export default function About() {
                 >
                   {model.selected && (
                     <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-pink-500/20 border border-pink-500/30">
-                      <span className="text-xs text-pink-300 font-medium">✓ Selected Model</span>
+                      <span className="text-xs text-pink-300 font-medium">✓ {t('about.selectedModel')}</span>
                     </div>
                   )}
                   <div className="flex items-center gap-3 mb-4">
@@ -147,7 +162,7 @@ export default function About() {
                 <svg className="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Why SVM was Selected
+                {t('about.whySVM')}
               </h3>
               <div className="grid md:grid-cols-2 gap-4">
                 {[
@@ -175,8 +190,8 @@ export default function About() {
                 🔍
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white">Key Features Analyzed</h2>
-                <p className="text-base text-gray-400">113 socioeconomic indicators across 6 categories</p>
+                <h2 className="text-xl font-bold text-white">{t('about.keyFeatures')}</h2>
+                <p className="text-base text-gray-400">{t('about.socioeconomicIndicators')}</p>
               </div>
             </div>
 
@@ -186,8 +201,8 @@ export default function About() {
                   <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center text-xl mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
                     {feature.icon}
                   </div>
-                  <h3 className="text-white font-semibold text-base mb-2">{feature.title}</h3>
-                  <p className="text-sm text-gray-400">{feature.desc}</p>
+                  <h3 className="text-white font-semibold text-base mb-2">{t(feature.titleKey)}</h3>
+                  <p className="text-sm text-gray-400">{t(feature.descKey)}</p>
                 </div>
               ))}
             </div>
@@ -200,8 +215,8 @@ export default function About() {
                 🔬
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white">Methodology</h2>
-                <p className="text-base text-gray-400">Our research process step by step</p>
+                <h2 className="text-xl font-bold text-white">{t('about.methodologyTitle')}</h2>
+                <p className="text-base text-gray-400">{t('about.ourProcess')}</p>
               </div>
             </div>
 
@@ -220,9 +235,9 @@ export default function About() {
                     <div className="flex-1 bg-[#1e1445]/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 group-hover:border-purple-500/40 transition-colors">
                       <div className="flex items-center gap-3 mb-2">
                         <span className="text-xl">{item.icon}</span>
-                        <h3 className="text-white font-semibold text-base">{item.title}</h3>
+                        <h3 className="text-white font-semibold text-base">{t(item.titleKey)}</h3>
                       </div>
-                      <p className="text-sm text-gray-400">{item.desc}</p>
+                      <p className="text-sm text-gray-400">{t(item.descKey)}</p>
                     </div>
                   </div>
                 ))}
@@ -237,7 +252,7 @@ export default function About() {
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 text-2xl mb-4 shadow-lg shadow-purple-500/30">
                 🏛️
               </div>
-              <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Data Source</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">{t('common.dataSource')}</p>
               <p className="text-xl font-bold text-white mb-1">Lembaga Zakat Negeri Kedah (LZNK)</p>
               <p className="text-sm text-gray-400">Official zakat recipient records from 2022-2024</p>
               <div className="flex items-center justify-center gap-4 mt-6">
