@@ -282,7 +282,7 @@ export default function FAQ() {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <a
-                href="mailto:support@p2pzakat.my"
+                href="mailto:daniyalrosli@gmail.com"
                 className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-medium rounded-xl hover:from-pink-400 hover:to-purple-500 transition-all shadow-lg shadow-pink-500/30"
               >
                 {t('faq.contact.btn')}
