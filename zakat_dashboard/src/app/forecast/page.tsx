@@ -160,6 +160,9 @@ export default function Forecast() {
               </div>
             </div>
 
+
+
+
             {/* Redesigned Line Chart */}
             <div className="mb-6">
               <div className="flex items-center justify-between mb-5">
@@ -178,13 +181,21 @@ export default function Forecast() {
               
               {/* Chart */}
               <div className="relative h-64 bg-white rounded-xl border border-gray-200 overflow-hidden">
-                {/* Y-axis label */}
-                <div className="absolute -left-1 top-1/2 -translate-y-1/2 -rotate-90 text-[10px] text-gray-500 whitespace-nowrap">
-                  Escape Rate (%)
+                {/* Y-axis label - fixed positioning with proper spacing */}
+                <div className="absolute left-0 top-0 bottom-8 w-8 flex items-center justify-center">
+                  <span 
+                    className="text-[10px] text-gray-500 whitespace-nowrap"
+                    style={{ 
+                      writingMode: 'vertical-rl',
+                      transform: 'rotate(180deg)'
+                    }}
+                  >
+                    Escape Rate (%)
+                  </span>
                 </div>
                 
                 {/* Y-axis values */}
-                <div className="absolute left-8 top-6 bottom-10 flex flex-col justify-between text-[10px] text-gray-500">
+                <div className="absolute left-8 top-4 bottom-8 flex flex-col justify-between text-[10px] text-gray-500 w-8 text-right pr-2">
                   <span>30%</span>
                   <span>25%</span>
                   <span>20%</span>
@@ -195,7 +206,7 @@ export default function Forecast() {
                 </div>
                 
                 {/* Chart area */}
-                <div className="absolute left-14 right-6 top-6 bottom-10">
+                <div className="absolute left-[72px] right-4 top-4 bottom-8">
                   {/* Horizontal grid lines */}
                   <div className="absolute inset-0">
                     {[0, 1, 2, 3, 4, 5, 6].map(i => (
@@ -256,7 +267,7 @@ export default function Forecast() {
                       }}
                     >
                       {/* Tooltip on hover */}
-                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded bg-gray-800 text-white text-[10px] font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded bg-gray-800 text-white text-[10px] font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-10">
                         {point.rate}%
                       </div>
                       {/* Dot */}
@@ -274,13 +285,13 @@ export default function Forecast() {
                       key={i}
                       className="absolute group"
                       style={{
-                        left: `${point.x}%`,
+                        left: `${Math.min(point.x, 98)}%`,
                         bottom: `${(point.rate / 30) * 100}%`,
                         transform: 'translate(-50%, 50%)'
                       }}
                     >
                       {/* Tooltip on hover */}
-                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded bg-gray-800 text-white text-[10px] font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded bg-gray-800 text-white text-[10px] font-medium whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-10">
                         {point.rate}% (projected)
                       </div>
                       {/* Square dot for forecast */}
@@ -289,18 +300,17 @@ export default function Forecast() {
                   ))}
                 </div>
                 
-                {/* X-axis */}
-                <div className="absolute left-14 right-6 bottom-2 flex justify-between">
+                {/* X-axis labels */}
+                <div className="absolute left-[72px] right-4 bottom-1 flex justify-between text-[10px] text-gray-500">
                   {['2022', '2023', '2024', '2025', '2026', '2027'].map((year, i) => (
-                    <span key={i} className="text-[10px] text-gray-500">{year}</span>
+                    <span key={i}>{year}</span>
                   ))}
                 </div>
-                
-                {/* X-axis label */}
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 text-[10px] text-gray-500">
-                  {t('common.year')}
-                </div>
               </div>
+
+
+
+
               
               {/* Stats bar */}
               <div className="flex justify-between mt-4 px-2">
