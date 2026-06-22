@@ -1,16 +1,52 @@
 @import "tailwindcss";
 @import "leaflet/dist/leaflet.css";
 
-:root {
+/* Light Mode */
+:root[data-theme="light"],
+:root:not(.dark) {
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+  --surface: #f8f9fa;
+  --surface-secondary: #f0f2f5;
+  --card-bg: #ffffff;
+  --card-border: #e5e9f0;
+  --accent-primary: #0066cc;
+  --accent-secondary: #00a8e8;
+  --accent-pink: #ff6b9d;
+  --accent-purple: #7c3aed;
+  --accent-cyan: #06b6d4;
+  --accent-green: #10b981;
+  --text-primary: #1a1a1a;
+  --text-secondary: #666666;
+  --text-tertiary: #999999;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Dark Mode */
+:root[data-theme="dark"],
+:root.dark {
   --background: #0f0a1e;
   --foreground: #ffffff;
+  --surface: #1a1035;
+  --surface-secondary: #241548;
   --card-bg: rgba(30, 20, 60, 0.6);
   --card-border: rgba(100, 80, 180, 0.3);
+  --accent-primary: #00d4ff;
+  --accent-secondary: #a855f7;
   --accent-pink: #ff6b9d;
-  --accent-cyan: #00d4ff;
   --accent-purple: #a855f7;
-  --accent-yellow: #fbbf24;
+  --accent-cyan: #00d4ff;
   --accent-green: #10b981;
+  --text-primary: #ffffff;
+  --text-secondary: #b0b0b0;
+  --text-tertiary: #888888;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(167, 139, 250, 0.15);
+  --shadow-lg: 0 10px 15px rgba(167, 139, 250, 0.2);
+  --shadow-xl: 0 20px 25px rgba(167, 139, 250, 0.25);
 }
 
 @theme inline {
@@ -20,27 +56,118 @@
   --font-mono: var(--font-geist-mono);
 }
 
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: linear-gradient(135deg, #0f0a1e 0%, #1a1035 50%, #0d1a2d 100%);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--background);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   min-height: 100vh;
+  font-weight: 400;
+  letter-spacing: 0.3px;
 }
 
-/* Custom scrollbar */
+/* Light Mode Gradient Background */
+:root[data-theme="light"] body,
+:root:not(.dark) body {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 50%, #eef2f7 100%);
+}
+
+/* Dark Mode Gradient Background */
+:root[data-theme="dark"] body,
+:root.dark body {
+  background: linear-gradient(135deg, #0f0a1e 0%, #1a1035 50%, #0d1a2d 100%);
+}
+
+/* Scrollbar Styling */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
+  height: 10px;
 }
 
-::-webkit-scrollbar-track {
+:root[data-theme="light"] ::-webkit-scrollbar-track,
+:root:not(.dark) ::-webkit-scrollbar-track {
+  background: #f0f2f5;
+}
+
+:root[data-theme="light"] ::-webkit-scrollbar-thumb,
+:root:not(.dark) ::-webkit-scrollbar-thumb {
+  background: #d0d5dd;
+  border-radius: 5px;
+}
+
+:root[data-theme="light"] ::-webkit-scrollbar-thumb:hover,
+:root:not(.dark) ::-webkit-scrollbar-thumb:hover {
+  background: #b0b5bd;
+}
+
+:root[data-theme="dark"] ::-webkit-scrollbar-track,
+:root.dark ::-webkit-scrollbar-track {
   background: rgba(30, 20, 60, 0.5);
 }
 
-::-webkit-scrollbar-thumb {
+:root[data-theme="dark"] ::-webkit-scrollbar-thumb,
+:root.dark ::-webkit-scrollbar-thumb {
   background: rgba(100, 80, 180, 0.5);
-  border-radius: 4px;
+  border-radius: 5px;
 }
 
-::-webkit-scrollbar-thumb:hover {
+:root[data-theme="dark"] ::-webkit-scrollbar-thumb:hover,
+:root.dark ::-webkit-scrollbar-thumb:hover {
   background: rgba(100, 80, 180, 0.7);
+}
+
+/* Selection */
+::selection {
+  background: var(--accent-primary);
+  color: white;
+}
+
+/* Smooth transitions for theme changes */
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+}
+
+/* Focus states for accessibility */
+:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* Utility classes for theme-aware styling */
+.bg-light-surface {
+  background: var(--surface);
+}
+
+.bg-light-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+}
+
+.text-light-primary {
+  color: var(--text-primary);
+}
+
+.text-light-secondary {
+  color: var(--text-secondary);
+}
+
+.border-light {
+  border-color: var(--card-border);
+}
+
+.shadow-light-md {
+  box-shadow: var(--shadow-md);
+}
+
+.shadow-light-lg {
+  box-shadow: var(--shadow-lg);
 }

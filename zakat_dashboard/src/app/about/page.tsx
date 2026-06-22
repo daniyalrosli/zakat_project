@@ -64,7 +64,7 @@ export default function About() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
             {[
               { value: '51,962', label: t('home.stats.recipients'), icon: '👥' },
-              { value: '113', label: t('home.stats.features'), icon: '📈' },
+              { value: '89', label: t('home.stats.features'), icon: '📈' },
               { value: '12', label: t('home.stats.districts'), icon: '📍' },
               { value: '3', label: t('about.dataCollected'), icon: '📅' },
             ].map((stat, i) => (

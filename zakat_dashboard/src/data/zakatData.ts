@@ -41,28 +41,28 @@ export const maritalStatusDistribution = [
 
 // Distribution by Health Status
 export const healthStatusDistribution = [
-  { status: 'SIHAT(NORMAL)', label: 'Healthy', count: 29606, percentage: 57.0 },
-  { status: 'SAKIT', label: 'Sick', count: 17446, percentage: 33.6 },
-  { status: 'CACAT', label: 'Disabled', count: 2652, percentage: 5.1 },
-  { status: 'MENINGGAL', label: 'Deceased', count: 1678, percentage: 3.2 },
-  { status: 'SAKIT DAN CACAT', label: 'Sick & Disabled', count: 816, percentage: 1.6 },
+  { status: 'SIHAT(NORMAL)', label: 'Healthy', count: 29488, percentage: 57.0 },
+  { status: 'SAKIT', label: 'Sick', count: 17328, percentage: 33.6 },
+  { status: 'CACAT', label: 'Disabled', count: 2643, percentage: 5.1 },
+  { status: 'MENINGGAL', label: 'Deceased', count: 1663, percentage: 3.2 },
+  { status: 'SAKIT DAN CACAT', label: 'Sick & Disabled', count: 840, percentage: 1.6 },
 ];
 
 // Distribution by Job Type
 export const jobTypeDistribution = [
-  { type: 'Tidak Bekerja', label: 'Unemployed', count: 30966, percentage: 59.6 },
-  { type: 'Kerja Sendiri', label: 'Self-employed', count: 15599, percentage: 30.0 },
-  { type: 'Swasta', label: 'Private Sector', count: 4096, percentage: 7.9 },
-  { type: 'Peniaga', label: 'Trader', count: 1223, percentage: 2.4 },
+  { type: 'Tidak Bekerja', label: 'Unemployed', count: 30848, percentage: 59.6 },
+  { type: 'Kerja Sendiri', label: 'Self-employed', count: 15481, percentage: 30.0 },
+  { type: 'Swasta', label: 'Private Sector', count: 4098, percentage: 7.9 },
+  { type: 'Peniaga', label: 'Trader', count: 1215, percentage: 2.4 },
   { type: 'Kerajaan', label: 'Government', count: 161, percentage: 0.3 },
-  { type: 'Pesara', label: 'Retired', count: 153, percentage: 0.3 },
+  { type: 'Pesara', label: 'Retired', count: 159, percentage: 0.3 },
 ];
 
 // Distribution by District (DAERAH)
 export const districtDistribution = [
-  { code: 'KM', name: 'Kuala Muda', count: 8275, percentage: 15.9 },
-  { code: 'KS', name: 'Kota Setar', count: 8013, percentage: 15.4 },
-  { code: 'BL', name: 'Baling', count: 7462, percentage: 14.4 },
+  { code: 'KM', name: 'Kuala Muda', count: 8184, percentage: 15.9 },
+  { code: 'KS', name: 'Kota Setar', count: 7924, percentage: 15.4 },
+  { code: 'BL', name: 'Baling', count: 7412, percentage: 14.4 },
   { code: 'KP', name: 'Kubang Pasu', count: 4817, percentage: 9.3 },
   { code: 'SK', name: 'Sik', count: 4490, percentage: 8.6 },
   { code: 'PD', name: 'Padang Terap', count: 4265, percentage: 8.2 },
