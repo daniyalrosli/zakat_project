@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Globe, Moon, Sun } from 'lucide-react';
+import { Menu, X, Globe } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import { useTheme } from '@/context/ThemeContext';
 
@@ -76,15 +76,6 @@ export default function Navbar() {
               ))}
             </div>
 
-            {/* Dark Mode Toggle - Desktop */}
-            <button
-              onClick={toggleTheme}
-              className="ml-4 p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 rounded-lg transition-colors border border-gray-200 dark:border-white/20"
-              aria-label="Toggle theme"
-            >
-              {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
-            </button>
-
             {/* Language Switcher - Desktop */}
             <div className="ml-2 relative">
               <button
@@ -130,13 +121,6 @@ export default function Navbar() {
 
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center gap-2">
-            <button
-              onClick={toggleTheme}
-              className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 rounded-lg transition-colors border border-gray-200 dark:border-white/20"
-              aria-label="Toggle theme"
-            >
-              {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
-            </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors"
