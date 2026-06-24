@@ -3,7 +3,7 @@
 
 export const datasetOverview = {
   totalRecipients: 51962,
-  totalColumns: 113,
+  totalColumns: 89,
   years: [2022, 2023, 2024],
   averageIncome: 762.96,
   medianIncome: 700.00,

@@ -301,7 +301,7 @@ export default function FAQ() {
             {[
               { value: '94.73%', labelKey: 'faq.stats.accuracy', icon: '🎯' },
               { value: '51,962', labelKey: 'faq.stats.recipients', icon: '👥' },
-              { value: '113', labelKey: 'faq.stats.features', icon: '📊' },
+              { value: '89', labelKey: 'faq.stats.features', icon: '📊' },
               { value: '12', labelKey: 'faq.stats.districts', icon: '📍' },
             ].map((stat, i) => (
               <div key={i} className="bg-[#1e1445]/60 backdrop-blur-sm rounded-xl p-4 border border-purple-500/20 text-center">

@@ -94,7 +94,7 @@ export default function About() {
                 <p>
                   This project develops a <span className="text-white font-semibold">machine learning-based predictive model</span> to assess the probability 
                   of zakat recipients escaping poverty. Using comprehensive data from <span className="text-pink-400 font-semibold">51,962 asnaf</span> (zakat recipients) 
-                  in Kedah, Malaysia collected between 2022-2024, we analyze <span className="text-cyan-400 font-semibold">113 socioeconomic features</span> to 
+                  in Kedah, Malaysia collected between 2022-2024, we analyze <span className="text-cyan-400 font-semibold">89 socioeconomic features</span> to 
                   predict escape potential within a 3-year horizon.
                 </p>
                 <p>
@@ -168,7 +168,7 @@ export default function About() {
                 {[
                   { title: 'Highest ROC-AUC (98.96%)', desc: 'Superior ability to distinguish between recipients who can escape poverty vs. those who cannot.', color: 'pink' },
                   { title: 'Best Accuracy (94.73%)', desc: 'Outperforms all other models in correctly classifying recipient outcomes.', color: 'cyan' },
-                  { title: 'Handles High Dimensions', desc: 'Effectively processes 113 features using RBF kernel for complex non-linear relationships.', color: 'purple' },
+                  { title: 'Handles High Dimensions', desc: 'Effectively processes 89 features using RBF kernel for complex non-linear relationships.', color: 'purple' },
                   { title: 'Robust to Overfitting', desc: 'Margin-based optimization provides better generalization on unseen data.', color: 'emerald' },
                 ].map((item, i) => (
                   <div key={i} className="flex gap-3 p-4 bg-white/5 rounded-xl border border-purple-500/10">

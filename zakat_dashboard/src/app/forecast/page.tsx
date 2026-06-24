@@ -553,7 +553,7 @@ export default function Forecast() {
                 <h4 className="text-sm font-semibold text-white mb-1">About This Model</h4>
                 <p className="text-xs text-gray-400">
                   This predictor uses a Support Vector Machine (SVM) with RBF kernel trained on {summaryStats.totalRecipients.toLocaleString()} zakat recipients from Kedah, Malaysia. 
-                  The model analyzes 113 features to predict poverty escape likelihood with {modelMetrics.rocAuc}% ROC-AUC score.
+                  The model analyzes 89 features to predict poverty escape likelihood with {modelMetrics.rocAuc}% ROC-AUC score.
                 </p>
               </div>
             </div>
